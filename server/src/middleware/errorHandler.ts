@@ -8,6 +8,7 @@ const errorHandler = (
 ) => {
     const statusCode = res.statusCode || 500;
 
+    console.log(error.message);
     res.status(statusCode).json({
         error: {
             message: error.message,

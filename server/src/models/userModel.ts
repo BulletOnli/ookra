@@ -22,12 +22,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cart: Array,
     totalSales: {
         type: Number,
         default: 0,
     },
 });
 
-export type userType = mongoose.InferSchemaType<typeof userSchema>;
-export default mongoose.model<userType>("User", userSchema);
+export type UserType = mongoose.InferSchemaType<typeof userSchema>;
+export default mongoose.model<UserType>("User", userSchema);

@@ -1,8 +1,8 @@
-import { userType } from "src/models/userModel";
+import { UserType } from "../models/userModel";
 
 type User = {
     _id: string;
-} & userType;
+} & UserType;
 
 declare global {
     namespace Express {

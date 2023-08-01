@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel";
 import bcrypt from "bcrypt";
-import Product from "../models/productModel";
 
 const generateToken = (_id: string) => {
     return jwt.sign({ _id }, process.env.JWT_SECRET!, {
@@ -73,92 +72,6 @@ export const getUserDetails = asyncHandler(
         } else {
             res.status(404);
             throw new Error("User not found");
-        }
-    }
-);
-
-export const getCartItems = asyncHandler(
-    async (req: Request, res: Response) => {
-        const { userId } = req.query;
-
-        const user = await User.findById(userId).select("-password");
-
-        if (user) {
-            res.status(200).json(user.cart);
-        } else {
-            res.status(404);
-            throw new Error("User not found");
-        }
-    }
-);
-
-export const addToCart = asyncHandler(async (req: Request, res: Response) => {
-    const { productId } = req.query;
-    const product = await Product.findById(productId).populate({
-        path: "seller",
-        select: ["-password", "-cart"],
-    });
-
-    const user = await User.findById(req.user._id);
-
-    if (user && product) {
-        const { productImg, productName, _id, price, seller } = product;
-
-        const isInCart = user.cart.find(
-            (item) => item._id.toString() === _id.toString()
-        );
-
-        if (isInCart) {
-            // remove the previous item in cart
-            const updatedCart = user.cart.filter(
-                (item) => item._id.toString() !== _id.toString()
-            );
-
-            user.cart = [
-                { ...isInCart, inCart: isInCart.inCart + 1 },
-                ...updatedCart,
-            ];
-            await user.save();
-
-            res.status(200).json("Already in cart, +1 Quantity");
-        } else {
-            const addedProduct = {
-                productImg,
-                productName,
-                _id,
-                price,
-                seller,
-                inCart: 1,
-            };
-
-            user.cart = [...user.cart, addedProduct];
-            await user.save();
-
-            res.status(200).json("Added to cart");
-        }
-    } else {
-        res.status(400);
-        throw new Error("Product not found");
-    }
-});
-
-export const removeToCart = asyncHandler(
-    async (req: Request, res: Response) => {
-        const { productId } = req.query;
-        const product = await Product.findById(productId);
-        const user = await User.findById(req.user._id).populate("cart");
-
-        if (user && product) {
-            const updatedCart = user.cart.filter(
-                (item) => item._id.toString() !== productId
-            );
-
-            user.cart = updatedCart;
-            await user.save();
-            res.status(200).json("Removed to cart");
-        } else {
-            res.status(400);
-            throw new Error("Product not found");
         }
     }
 );
