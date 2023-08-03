@@ -1,7 +1,9 @@
 import express from "express";
-const router = express.Router();
+const cartRouter = express.Router();
 import {
     addToCart,
+    cartCheckout,
+    clearCart,
     decItemQuantity,
     getCartItems,
     incItemQuantity,
@@ -9,11 +11,15 @@ import {
 } from "../controllers/cart.controller";
 import protectRoute from "../middleware/protectRoute";
 
-router.get("/", protectRoute, getCartItems);
-router.post("/add", protectRoute, addToCart);
-router.delete("/remove", protectRoute, removeToCart);
+cartRouter.get("/all", protectRoute, getCartItems);
+cartRouter.delete("/all/remove", protectRoute, clearCart);
 
-router.put("/item/increase", protectRoute, incItemQuantity);
-router.put("/item/decrease", protectRoute, decItemQuantity);
+cartRouter.post("/add", protectRoute, addToCart);
+cartRouter.delete("/remove", protectRoute, removeToCart);
 
-export default router;
+cartRouter.patch("/item/increase", protectRoute, incItemQuantity);
+cartRouter.patch("/item/decrease", protectRoute, decItemQuantity);
+
+cartRouter.delete("/checkout", protectRoute, cartCheckout);
+
+export default cartRouter;

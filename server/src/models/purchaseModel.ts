@@ -1,6 +1,6 @@
 import mongoose, { InferSchemaType } from "mongoose";
 
-export const cartSchema = new mongoose.Schema(
+const purchaseSchema = new mongoose.Schema(
     {
         productName: {
             type: String,
@@ -25,16 +25,7 @@ export const cartSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        seller: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
-        inCart: {
-            type: Number,
-            required: true,
-        },
-        cartOwner: {
+        purchaseOwner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
@@ -45,6 +36,6 @@ export const cartSchema = new mongoose.Schema(
     }
 );
 
-export type CartType = InferSchemaType<typeof cartSchema>;
+export type purchaseSchemaType = InferSchemaType<typeof purchaseSchema>;
 
-export default mongoose.model<CartType>("Cart", cartSchema);
+export default mongoose.model<purchaseSchemaType>("Purchase", purchaseSchema);

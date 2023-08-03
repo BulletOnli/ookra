@@ -8,7 +8,7 @@ import {
 import multer from "multer";
 import protectRoute from "../middleware/protectRoute";
 
-const router = express.Router();
+const productRouter = express.Router();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -20,9 +20,19 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.get("/", getSingleProduct);
-router.get("/all", getAllProducts);
-router.post("/new", protectRoute, upload.single("productImg"), addProduct);
-router.put("/update", protectRoute, upload.single("productImg"), updateProduct);
+productRouter.get("/", getSingleProduct);
+productRouter.get("/all", getAllProducts);
+productRouter.post(
+    "/new",
+    protectRoute,
+    upload.single("productImg"),
+    addProduct
+);
+productRouter.put(
+    "/update",
+    protectRoute,
+    upload.single("productImg"),
+    updateProduct
+);
 
-export default router;
+export default productRouter;

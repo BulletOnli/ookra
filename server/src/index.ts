@@ -7,9 +7,10 @@ import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
 import errorHandler from "./middleware/errorHandler";
 
-import userRoutes from "./routes/user.routes";
-import productRoutes from "./routes/product.routes";
-import cartRoutes from "./routes/cart.routes";
+import userRouter from "./routes/user.routes";
+import productRouter from "./routes/product.routes";
+import cartRouter from "./routes/cart.routes";
+import purchaseRouter from "./routes/purchase.routes";
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -24,9 +25,10 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-app.use("/user", userRoutes);
-app.use("/product", productRoutes);
-app.use("/cart", cartRoutes);
+app.use("/user", userRouter);
+app.use("/product", productRouter);
+app.use("/cart", cartRouter);
+app.use("/purchase", purchaseRouter);
 
 app.use(errorHandler);
 

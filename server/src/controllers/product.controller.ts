@@ -8,7 +8,7 @@ export const getSingleProduct = asyncHandler(
         const { productId } = req.query;
         const product = await Product.findById(productId).populate({
             path: "seller",
-            select: ["-password", "-cart"],
+            select: ["-password"],
         });
 
         if (product) {
@@ -24,15 +24,22 @@ export const getAllProducts = asyncHandler(
     async (req: Request, res: Response) => {
         const { sellerId } = req.query;
 
-        let products = await Product.find().populate({
-            path: "seller",
-            select: ["-password", "-cart"],
-        });
+        let products = await Product.find()
+            .populate({
+                path: "seller",
+                select: ["-password"],
+            })
+            .sort({ updatedAt: "desc" });
 
         if (sellerId) {
-            products = products.filter(
-                (product) => product.seller._id.toString() === sellerId
-            );
+            products = await Product.find({ seller: sellerId })
+                .populate({
+                    path: "seller",
+                    select: ["-password"],
+                })
+                .sort({
+                    updatedAt: "desc",
+                });
         }
 
         res.status(200).json(products);
@@ -64,7 +71,7 @@ export const addProduct = asyncHandler(async (req: Request, res: Response) => {
     });
 
     if (newProduct) {
-        res.status(200).json("Added a new product!");
+        res.status(200).json({ message: "Added a new product!" });
     } else {
         res.status(400);
         throw new Error("Adding product failed");
@@ -78,7 +85,7 @@ export const removeProduct = asyncHandler(
         try {
             await Product.findByIdAndDelete(productId);
 
-            res.status(200).json("Product deleted!");
+            res.status(200).json({ message: "Product deleted!" });
         } catch (error) {
             res.status(500);
             throw new Error("Deleting failed! Try again");
@@ -95,25 +102,25 @@ export const updateProduct = asyncHandler(
             req.body
         );
 
-        if (updatedProduct) {
-            if (req.file && updatedProduct.productImg) {
-                const img = await uploadImg(req.file);
-                const newProductImg = {
-                    id: img.asset_id,
-                    url: img.url,
-                };
-
-                // delete the previous img
-                await deleteImg(updatedProduct.productImg.id);
-                // save the new img to db
-                updatedProduct.productImg = newProductImg;
-                await updatedProduct.save();
-            }
-
-            res.status(200).json("Product updated!");
-        } else {
-            res.status(400);
-            throw new Error("Failed to update product");
+        if (!updatedProduct) {
+            res.status(404);
+            throw new Error("Failed to update, product not found");
         }
+
+        if (req.file && updatedProduct.productImg) {
+            const img = await uploadImg(req.file);
+            const newProductImg = {
+                id: img.asset_id,
+                url: img.url,
+            };
+
+            // delete the previous img
+            await deleteImg(updatedProduct.productImg.id);
+            // save the new img to db
+            updatedProduct.productImg = newProductImg;
+            await updatedProduct.save();
+        }
+
+        res.status(200).json({ message: "Product updated!" });
     }
 );
