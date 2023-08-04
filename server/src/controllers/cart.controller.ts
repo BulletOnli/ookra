@@ -150,6 +150,7 @@ export const cartCheckout = asyncHandler(
                     await seller.save();
                     // add the new purchase to user's purchase history
                     const purchaseItem = await Purchase.findById(item._id);
+
                     if (purchaseItem) {
                         purchaseItem.price += item.price;
                         await purchaseItem.save();
