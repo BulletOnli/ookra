@@ -1,6 +1,6 @@
 "use client";
-import ProductCard from "@/app/components/product/ProductCard";
-import ProductOverview from "@/app/components/product/ProductOverview";
+import ProductCard from "@/components/product/ProductCard";
+import ProductOverview from "@/components/product/ProductOverview";
 import Link from "next/link";
 
 interface ProductPageProps {
@@ -11,8 +11,8 @@ interface ProductPageProps {
 
 const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
     return (
-        <div className="w-[80vw] 2xl:w-[60vw] flex flex-col items-center gap-6 p-6 mb-6">
-            <p className="w-full text-lg font-semibold text-gray-600 ">
+        <div className="w-[80vw] 2xl:w-[60vw] flex flex-col items-center p-6 mb-6">
+            <p className="w-full text-lg font-semibold text-gray-800 mb-4">
                 <Link href="/">All Items</Link>
                 {" > "}
                 <Link href="#">Category</Link> {" > "}
@@ -20,7 +20,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
             </p>
             <ProductOverview />
 
-            <div className="w-full flex flex-col gap-4">
+            <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>
                 <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-2 lg:gap-8">
                     <ProductCard />

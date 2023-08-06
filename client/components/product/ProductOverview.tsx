@@ -6,6 +6,7 @@ import {
     Spacer,
     VStack,
 } from "@chakra-ui/react";
+import { BsBookmark, BsCartPlus } from "react-icons/bs";
 import { FaStoreAlt } from "react-icons/fa";
 
 const ProductOverview = () => {
@@ -20,7 +21,7 @@ const ProductOverview = () => {
                 boxShadow="sm"
             />
             <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full h-[80%] flex flex-col items-center justify-center gap-4 p-8 bg-white shadow-sm rounded-xl">
+                <div className="w-full h-[80%] flex flex-col items-center justify-center gap-4 p-8 bg-white  shadow-sm rounded-xl">
                     <HStack w="full">
                         <h1 className="text-3xl font-bold ">
                             Iphone 14 Pro Max
@@ -56,6 +57,7 @@ const ProductOverview = () => {
                             rounded="full"
                             variant="outline"
                             borderColor="black"
+                            leftIcon={<BsCartPlus size={20} />}
                         >
                             Add to cart
                         </Button>
@@ -69,12 +71,11 @@ const ProductOverview = () => {
                         <Avatar name="Bullet" />
                         <VStack spacing={0}>
                             <p className="font-semibold">Gemmuel Dela Pena</p>
-                            <small className="w-full">
-                                Total Sales: P12,000
-                            </small>
+                            <small className="w-full">Products: 4</small>
                         </VStack>
                     </HStack>
                     <Spacer />
+
                     <Button
                         leftIcon={<FaStoreAlt size={18} />}
                         variant="outline"

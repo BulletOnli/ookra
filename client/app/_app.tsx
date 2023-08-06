@@ -1,10 +1,10 @@
 "use client";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Footer from "../components/Footer";
 import { usePathname } from "next/navigation";
 import NextTopLoader from "nextjs-toploader";
+import Navbar from "@/components/Navbar";
 
 const App = ({ children }: { children: React.ReactNode }) => {
     const queryClient = new QueryClient();
@@ -15,10 +15,10 @@ const App = ({ children }: { children: React.ReactNode }) => {
         <QueryClientProvider client={queryClient}>
             <NextTopLoader />
             <ChakraProvider>
-                <div className="w-full min-h-screen flex flex-col bg-[#F0F2F5] items-center ">
+                <div className="w-full min-h-screen flex flex-col items-center bg-[#EBEAF3] font-roboto">
                     {!hideComponents && <Navbar />}
                     {children}
-                    {!hideComponents && <Footer />}
+                    <Footer />
                 </div>
             </ChakraProvider>
         </QueryClientProvider>

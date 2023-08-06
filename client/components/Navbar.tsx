@@ -1,16 +1,19 @@
 import {
     Avatar,
+    Button,
     HStack,
     Input,
     InputGroup,
     InputLeftElement,
     Menu,
     MenuButton,
-    MenuList,
     MenuItem,
+    MenuList,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { BsSearch, BsCart } from "react-icons/bs";
+import { BsSearch, BsCart2, BsCreditCard } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
+import { MdOutlineLogout } from "react-icons/md";
 
 const Navbar = () => {
     return (
@@ -19,8 +22,7 @@ const Navbar = () => {
                 <div className="text-2xl font-bold tracking-wider">Ookra</div>
             </Link>
 
-            <HStack spacing={10} fontWeight="medium">
-                <Link href="#">Shop</Link>
+            <HStack spacing={10} fontWeight="semibold">
                 <Link href="#">Categories</Link>
                 <Link href="#">New Arrival</Link>
                 <Link href="#">Brands</Link>
@@ -33,20 +35,35 @@ const Navbar = () => {
                     </InputLeftElement>
                     <Input type="search" placeholder="Search" rounded="full" />
                 </InputGroup>
-                <BsCart className="text-3xl cursor-pointer" />
+                <BsCart2 className="text-3xl cursor-pointer" />
 
-                <Menu>
+                <Menu isLazy>
                     <MenuButton bg="transparent">
                         <Avatar name="bullet" size="sm" />
                     </MenuButton>
                     <MenuList>
-                        <MenuItem as={Link} href="#">
+                        <MenuItem
+                            icon={<FaUserCircle size={17} />}
+                            as={Link}
+                            href="/user/bullet"
+                            className="hover:bg-gray-100"
+                        >
                             My Account
                         </MenuItem>
-                        <MenuItem as={Link} href="#">
+                        <MenuItem
+                            icon={<BsCreditCard size={17} />}
+                            as={Link}
+                            href="#"
+                            className="hover:bg-gray-100"
+                        >
                             My Purchase
                         </MenuItem>
-                        <MenuItem as={Link} href="#">
+                        <MenuItem
+                            icon={<MdOutlineLogout size={17} />}
+                            as={Link}
+                            href="/login"
+                            className="hover:bg-gray-100"
+                        >
                             Logout
                         </MenuItem>
                     </MenuList>

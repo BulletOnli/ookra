@@ -1,9 +1,6 @@
-import dynamic from "next/dynamic";
 import "./globals.css";
 import type { Metadata } from "next";
-const App = dynamic(() => import("./App"), {
-    ssr: false,
-});
+import App from "./_app";
 
 export const metadata: Metadata = {
     title: "Ookra Marketplace",

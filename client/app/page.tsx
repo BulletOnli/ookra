@@ -1,7 +1,6 @@
 "use client";
-import { HStack, Spacer } from "@chakra-ui/react";
-import ImageSlider from "./components/ImageSlider";
-import ProductCard from "./components/product/ProductCard";
+import ImageSlider from "@/components/ImageSlider";
+import ProductCard from "@/components/product/ProductCard";
 
 const Homepage = () => {
     return (

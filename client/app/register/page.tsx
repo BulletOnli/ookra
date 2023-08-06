@@ -1,10 +1,18 @@
 "use client";
+import {
+    Button,
+    Divider,
+    FormControl,
+    HStack,
+    Image,
+    Input,
+} from "@chakra-ui/react";
 import Link from "next/link";
 
-const RegisterPage = () => {
+const Registerpage = () => {
     return (
-        <div className="w-full bg-red-200 flex flex-col items-center">
-            <div className="w-full flex justify-center p-4 bg-white shadow-custom">
+        <div className="w-full h-screen flex flex-col justify-center items-center">
+            <nav className="absolute top-0 w-full flex justify-center p-4 bg-white shadow-custom">
                 <div className="w-[60%] flex items-center justify-between">
                     <Link href="/">
                         <h1 className="text-2xl font-bold tracking-wider">
@@ -15,9 +23,41 @@ const RegisterPage = () => {
                         Need help?
                     </Link>
                 </div>
+            </nav>
+
+            <div className="w-[60rem] h-[30rem] flex justify-center rounded-xl bg-white shadow-custom p-6">
+                <div className="w-[50%] h-full flex justify-center items-center">
+                    <Image src="/illu.svg" w="25rem" />
+                </div>
+
+                <div className="w-[50%] h-full flex flex-col items-center justify-center p-6">
+                    <p className="text-2xl font-semibold mb-6">
+                        Create your account
+                    </p>
+                    <FormControl as="form">
+                        <HStack mb={4}>
+                            <Input type="text" placeholder="First Name" />
+                            <Input type="text" placeholder="Last Name" />
+                        </HStack>
+                        <Input type="text" placeholder="Username" mb={4} />
+                        <Input type="password" placeholder="Password" />
+                        <Button w="full" mt={4} colorScheme="blue">
+                            Create account
+                        </Button>
+                    </FormControl>
+                    <small className="w-full text-center mt-2">
+                        Already have an account?{" "}
+                        <Link
+                            href="/login"
+                            className="font-semibold text-blue-600 hover:underline"
+                        >
+                            Login
+                        </Link>
+                    </small>
+                </div>
             </div>
         </div>
     );
 };
 
-export default RegisterPage;
+export default Registerpage;
