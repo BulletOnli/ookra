@@ -8,49 +8,59 @@ import {
 } from "@chakra-ui/react";
 import { BsBookmark, BsCartPlus } from "react-icons/bs";
 import { FaStoreAlt } from "react-icons/fa";
+import { ProductType } from "./ProductCard";
+import { useQuery } from "react-query";
+import { getSingleProduct } from "@/api/productsApi";
 
-const ProductOverview = () => {
+const ProductOverview = ({ productId }: { productId: string }) => {
+    const productQuery = useQuery({
+        queryKey: ["product"],
+        queryFn: async () => await getSingleProduct(productId),
+    });
+
+    const productData: ProductType = productQuery?.data;
+
     return (
         <div className="w-full h-full flex justify-center gap-4">
             <Image
-                src="/pc.png"
-                fallbackSrc="https://via.placeholder.com/150"
+                // src={productData?.productImg?.url}
+                fallbackSrc="https://via.placeholder.com/500"
                 objectFit="cover"
                 boxSize="30rem"
                 rounded="xl"
                 boxShadow="sm"
             />
             <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full h-[80%] flex flex-col items-center justify-center gap-4 p-8 bg-white  shadow-sm rounded-xl">
+                <div className="w-full h-[80%] flex flex-col items-center justify-around gap-4 p-8 bg-white  shadow-sm rounded-xl">
                     <HStack w="full">
-                        <h1 className="text-3xl font-bold ">
-                            Iphone 14 Pro Max
+                        <h1 className="text-2xl font-bold ">
+                            {productData?.productName}
                         </h1>
                         <Spacer />
-                        <p className="font-bold text-lg p-2 text-red-500">
-                            P200.79
+                        <p className="font-bold text-xl p-2 text-red-500">
+                            P{productData?.price}
                         </p>
                     </HStack>
-                    <p className="my-4 font-semibold text-center">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Maiores ut tenetur voluptatum dolorum repellendus
-                        atque molestias cupiditate, quod minus corrupti?
+
+                    <p className="my-4 font-medium text-center">
+                        {productData?.description}
                     </p>
+
                     <div className="w-full flex justify-around">
                         <VStack spacing={0}>
                             <p className="font-semibold">Category</p>
-                            <p>Soap</p>
+                            <p>{productData?.category}</p>
                         </VStack>
                         <VStack spacing={0}>
                             <p className="font-semibold">Stocks</p>
-                            <p>200</p>
+                            <p>{productData?.stocks}</p>
                         </VStack>
                         <VStack spacing={0}>
                             <p className="font-semibold">Sold</p>
-                            <p>10k</p>
+                            <p>{productData?.sold}k</p>
                         </VStack>
                     </div>
-                    <Spacer />
+
                     <div className="w-full flex justify-center gap-4 ">
                         <Button
                             w="10rem"
@@ -61,17 +71,20 @@ const ProductOverview = () => {
                         >
                             Add to cart
                         </Button>
-                        <Button w="10rem" rounded="full" colorScheme="teal">
+                        <Button w="10rem" rounded="full" colorScheme="blue">
                             Buy Now
                         </Button>
                     </div>
                 </div>
                 <div className="w-full h-[20%] flex items-center px-4 bg-white shadow-sm rounded-lg">
                     <HStack>
-                        <Avatar name="Bullet" />
+                        <Avatar name={productData?.seller?.username} />
                         <VStack spacing={0}>
-                            <p className="font-semibold">Gemmuel Dela Pena</p>
-                            <small className="w-full">Products: 4</small>
+                            <p className="font-semibold">
+                                {productData?.seller?.firstName}{" "}
+                                {productData?.seller?.lastName}
+                            </p>
+                            <small className="w-full">Products: --</small>
                         </VStack>
                     </HStack>
                     <Spacer />

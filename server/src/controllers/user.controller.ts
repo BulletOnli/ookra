@@ -10,6 +10,10 @@ const generateToken = (_id: string) => {
     });
 };
 
+export const getAccountDetails = asyncHandler(async (req, res) => {
+    res.status(200).json(req.user);
+});
+
 export const registerUser = asyncHandler(
     async (req: Request, res: Response) => {
         const { firstName, lastName, password, username, location } = req.body;

@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        required: true,
     },
     totalSales: {
         type: Number,

@@ -1,13 +1,16 @@
 import express from "express";
 import {
+    getAccountDetails,
     getUserDetails,
     loginUser,
     registerUser,
 } from "../controllers/user.controller";
+import protectRoute from "../middleware/protectRoute";
 
 const userRouter = express.Router();
 
-userRouter.get("/", getUserDetails);
+userRouter.get("/account/details", protectRoute, getAccountDetails);
+userRouter.get("/seller/details", getUserDetails);
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 

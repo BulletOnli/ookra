@@ -1,4 +1,5 @@
 "use client";
+import { loginUser } from "@/api/userApi";
 import {
     Button,
     Divider,
@@ -6,10 +7,49 @@ import {
     HStack,
     Image,
     Input,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, ChangeEvent, FormEvent } from "react";
 
 const LoginPage = () => {
+    const router = useRouter();
+    const toast = useToast();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        try {
+            await loginUser({ username, password });
+
+            toast({
+                title: "Login Success",
+                status: "success",
+                isClosable: true,
+                duration: 3000,
+                position: "top",
+                variant: "top-accent",
+            });
+            router.push("/");
+        } catch (error: any) {
+            console.log(error);
+            toast({
+                title: "Wrong username or password",
+                status: "error",
+                isClosable: true,
+                duration: 3000,
+                position: "top",
+                variant: "top-accent",
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="w-full h-screen flex flex-col justify-center items-center">
             <nav className="absolute top-0 w-full flex justify-center p-4 bg-white shadow-custom">
@@ -34,13 +74,35 @@ const LoginPage = () => {
                     <p className="text-2xl font-semibold mb-6">
                         Login to your account
                     </p>
-                    <FormControl as="form">
-                        <Input type="text" placeholder="Username" mb={4} />
-                        <Input type="password" placeholder="Password" />
-                        <Button w="full" mt={4} colorScheme="blue">
+                    <form onSubmit={handleSubmit}>
+                        <Input
+                            type="text"
+                            placeholder="Username"
+                            mb={4}
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                        <Input
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <Button
+                            w="full"
+                            mt={4}
+                            colorScheme="blue"
+                            type="submit"
+                            isLoading={isLoading}
+                            spinnerPlacement="start"
+                        >
                             Log in
                         </Button>
-                    </FormControl>
+                    </form>
                     <small className="w-full text-center mt-2">
                         Dont have an account?{" "}
                         <Link

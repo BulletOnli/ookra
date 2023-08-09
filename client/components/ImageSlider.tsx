@@ -17,13 +17,13 @@ const ImageSlider = () => {
                     clickable: true,
                 }}
                 modules={[Pagination]}
-                className="mySwiper w-full h-[25rem]"
+                className="mySwiper w-full h-[14rem]"
             >
-                <SwiperSlide className="bg-[url(/slide1.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
-                <SwiperSlide className="bg-[url(/slide2.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
-                <SwiperSlide className="bg-[url(/slide3.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
-                <SwiperSlide className="bg-[url(/slide1.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
-                <SwiperSlide className="bg-[url(/pc.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
+                <SwiperSlide className="bg-[url(/banner1.webp)] bg-cover bg-center bg-no-repeat cursor-grab" />
+                <SwiperSlide className="bg-[url(/banner2.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
+                <SwiperSlide className="bg-[url(/banner3.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
+                <SwiperSlide className="bg-[url(/banner4.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
+                <SwiperSlide className="bg-[url(/banner5.png)] bg-cover bg-center bg-no-repeat cursor-grab" />
             </Swiper>
         </>
     );

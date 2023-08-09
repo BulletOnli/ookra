@@ -1,15 +1,22 @@
 "use client";
-import ProductCard from "@/components/product/ProductCard";
+import { getAllProducts, getSingleProduct } from "@/api/productsApi";
+import ProductCard, { ProductType } from "@/components/product/ProductCard";
 import ProductOverview from "@/components/product/ProductOverview";
 import Link from "next/link";
+import { useQuery } from "react-query";
 
-interface ProductPageProps {
+type ProductPageProps = {
     params: {
         productId: string;
     };
-}
+};
 
-const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
+const ProductPage = ({ params }: ProductPageProps) => {
+    const productQuery = useQuery({
+        queryKey: ["product", "all"],
+        queryFn: getAllProducts,
+    });
+
     return (
         <div className="w-[80vw] 2xl:w-[60vw] flex flex-col items-center p-6 mb-6">
             <p className="w-full text-lg font-semibold text-gray-800 mb-4">
@@ -18,19 +25,19 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
                 <Link href="#">Category</Link> {" > "}
                 {params.productId}
             </p>
-            <ProductOverview />
+            <ProductOverview productId={params.productId} />
 
             <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>
                 <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-2 lg:gap-8">
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
+                    {productQuery?.data
+                        ?.slice(0, 10)
+                        .map((product: ProductType) => (
+                            <ProductCard
+                                productData={product}
+                                key={product._id}
+                            />
+                        ))}
                 </div>
             </div>
         </div>
