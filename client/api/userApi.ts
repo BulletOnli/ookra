@@ -1,4 +1,4 @@
-import { UserType } from "@/stores/userStore";
+import { UserType } from "@/src/stores/userStore";
 import axios from "axios";
 
 const API: string = "http://localhost:5050/user";

@@ -17,7 +17,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import useUserStore from "@/stores/userStore";
+import useUserStore from "@/src/stores/userStore";
 import { useRouter } from "next/navigation";
 
 const Cart = dynamic(() => import("./cart/Cart"));
