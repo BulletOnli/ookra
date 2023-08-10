@@ -1,9 +1,9 @@
 "use client";
-import { getAllProducts, getSingleProduct } from "@/api/productsApi";
-import ProductCard, { ProductType } from "@/components/product/ProductCard";
-import ProductOverview from "@/components/product/ProductOverview";
+import { getAllProducts, getSingleProduct } from "@/src/api/productsApi";
+import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
+import ProductOverview from "@/src/components/product/ProductOverview";
 import Link from "next/link";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 type ProductPageProps = {
     params: {

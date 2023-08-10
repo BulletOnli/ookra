@@ -1,9 +1,9 @@
 "use client";
-import { getAllProducts } from "@/api/productsApi";
-import ImageSlider from "@/components/ImageSlider";
-import ProductCard, { ProductType } from "@/components/product/ProductCard";
+import { getAllProducts } from "@/src/api/productsApi";
+import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
+import ImageSlider from "@/src/components/ImageSlider";
 import { Image } from "@chakra-ui/react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const Homepage = () => {
     const productQuery = useQuery({

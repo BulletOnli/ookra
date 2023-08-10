@@ -1,5 +1,5 @@
 "use client";
-import { registerUser } from "@/api/userApi";
+import { registerUser } from "@/src/api/userApi";
 import { Button, HStack, Image, Input, useToast } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

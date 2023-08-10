@@ -13,7 +13,14 @@ export const fetchAccountDetails = async () => {
     return response.data;
 };
 
-export const registerUser = async (data: UserType) => {
+type RegisterDetailsType = {
+    firstName: string;
+    lastName: string;
+    username: string;
+    password: string;
+};
+
+export const registerUser = async (data: RegisterDetailsType) => {
     const response = await axios.post(`${API}/register`, data);
 
     if (response.data.token) {

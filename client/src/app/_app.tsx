@@ -1,13 +1,15 @@
 "use client";
 import { ChakraProvider } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import Footer from "../components/Footer";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Footer from "@/src/components/Footer";
 import { usePathname } from "next/navigation";
 import NextTopLoader from "nextjs-toploader";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/src/components/Navbar";
+
+const queryClient = new QueryClient();
 
 const App = ({ children }: { children: React.ReactNode }) => {
-    const queryClient = new QueryClient();
     const pathname = usePathname();
     const hideComponents = pathname === "/login" || pathname === "/register";
 
@@ -20,6 +22,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
                     {children}
                     <Footer />
                 </div>
+                <ReactQueryDevtools initialIsOpen={false} />
             </ChakraProvider>
         </QueryClientProvider>
     );

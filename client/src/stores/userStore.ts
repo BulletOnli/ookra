@@ -1,4 +1,4 @@
-import { fetchAccountDetails } from "@/api/userApi";
+import { fetchAccountDetails } from "@/src/api/userApi";
 import { create } from "zustand";
 
 export type UserType = {
@@ -7,25 +7,27 @@ export type UserType = {
     username: string;
     password: string;
     totalSales?: number;
+    _id: string;
 };
 
 type UserState = {
-    isLoggedIn: boolean | null;
     accountDetails: UserType | null;
     getAccountDetails: () => Promise<void>;
     logoutUser: () => void;
 };
 
 const useUserStore = create<UserState>((set) => ({
-    isLoggedIn: false,
     accountDetails: null,
     getAccountDetails: async () => {
         const response = await fetchAccountDetails();
-        set({ accountDetails: response, isLoggedIn: true });
+
+        if (response) {
+            set({ accountDetails: response });
+        }
     },
     logoutUser: () => {
         localStorage.removeItem("ookraToken");
-        set({ accountDetails: null, isLoggedIn: false });
+        set({ accountDetails: null });
     },
 }));
 

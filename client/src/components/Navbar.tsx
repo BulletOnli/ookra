@@ -12,7 +12,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { BsSearch, BsCart2, BsCreditCard } from "react-icons/bs";
+import { BsSearch, BsCart2, BsCreditCard, BsGear } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 import dynamic from "next/dynamic";
@@ -101,6 +101,12 @@ const Navbar = () => {
                                     My Purchase
                                 </MenuItem>
                                 <MenuItem
+                                    icon={<BsGear size={17} />}
+                                    className="hover:bg-gray-100"
+                                >
+                                    Settings
+                                </MenuItem>
+                                <MenuItem
                                     icon={<MdOutlineLogout size={17} />}
                                     className="hover:bg-gray-100"
                                     onClick={handleLogout}
@@ -113,7 +119,11 @@ const Navbar = () => {
                 </HStack>
             </nav>
 
-            <Cart isOpen={isOpen} onClose={onClose} />
+            <Cart
+                isOpen={isOpen}
+                onClose={onClose}
+                accountDetails={accountDetails}
+            />
         </>
     );
 };

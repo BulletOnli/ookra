@@ -5,20 +5,59 @@ import {
     Image,
     Spacer,
     VStack,
+    useToast,
 } from "@chakra-ui/react";
 import { BsBookmark, BsCartPlus } from "react-icons/bs";
 import { FaStoreAlt } from "react-icons/fa";
 import { ProductType } from "./ProductCard";
-import { useQuery } from "react-query";
-import { getSingleProduct } from "@/api/productsApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSingleProduct } from "@/src/api/productsApi";
+import { addToCart } from "@/src/api/cartApi";
+import { useState } from "react";
 
 const ProductOverview = ({ productId }: { productId: string }) => {
+    const toast = useToast();
+    const queryClient = useQueryClient();
+    const [isLoading, setIsLoading] = useState(false);
+
     const productQuery = useQuery({
         queryKey: ["product"],
-        queryFn: async () => await getSingleProduct(productId),
+        queryFn: () => getSingleProduct(productId),
+    });
+    const productData: ProductType = productQuery?.data;
+
+    const addToCartMutation = useMutation({
+        mutationFn: addToCart,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+        },
     });
 
-    const productData: ProductType = productQuery?.data;
+    const handleAddToCart = () => {
+        try {
+            addToCartMutation.mutate(productId);
+            toast({
+                title: "Added to Cart",
+                status: "success",
+                isClosable: true,
+                duration: 1000,
+                position: "top-right",
+                variant: "left-accent",
+            });
+        } catch (error: any) {
+            console.log(error);
+            const err =
+                error.response.data.error.message || "An error occurred";
+            toast({
+                title: err,
+                status: "error",
+                isClosable: true,
+                duration: 3000,
+                position: "top",
+                variant: "top-accent",
+            });
+        }
+    };
 
     return (
         <div className="w-full h-full flex justify-center gap-4">
@@ -68,10 +107,17 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                             variant="outline"
                             borderColor="black"
                             leftIcon={<BsCartPlus size={20} />}
+                            onClick={handleAddToCart}
                         >
                             Add to cart
                         </Button>
-                        <Button w="10rem" rounded="full" colorScheme="blue">
+                        <Button
+                            w="10rem"
+                            rounded="full"
+                            colorScheme="blue"
+                            isLoading={isLoading}
+                            spinnerPlacement="start"
+                        >
                             Buy Now
                         </Button>
                     </div>

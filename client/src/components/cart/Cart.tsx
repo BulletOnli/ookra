@@ -10,22 +10,30 @@ import {
     HStack,
     Spacer,
 } from "@chakra-ui/react";
-import CartItem from "./CartItem";
-import { useQuery } from "react-query";
-import { getCartItems } from "@/api/cartApi";
+import CartItem, { CartItemType } from "./CartItem";
+import { useQuery } from "@tanstack/react-query";
+import { getCartItems } from "@/src/api/cartApi";
+import { UserType } from "@/src/stores/userStore";
+import CartItemSkeleton from "./CartItemSkeleton";
 
 type CartProps = {
     onClose: () => void;
     isOpen: boolean;
+    accountDetails: UserType | null;
 };
 
-const Cart = ({ onClose, isOpen }: CartProps) => {
-    // const cartItemsQuery = useQuery({
-    //     queryKey: ["cartItems"],
-    //     queryFn: getCartItems,
-    // });
-
-    // console.log(cartItemsQuery.data);
+const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
+    const cartItemsQuery = useQuery({
+        queryKey: ["cartItems"],
+        queryFn: () => {
+            if (accountDetails) {
+                return getCartItems(accountDetails._id);
+            } else {
+                return null;
+            }
+        },
+        enabled: accountDetails != null,
+    });
 
     return (
         <Drawer onClose={onClose} isOpen={isOpen} size="md">
@@ -36,9 +44,10 @@ const Cart = ({ onClose, isOpen }: CartProps) => {
                 <DrawerBody>
                     <div className="w-full h-full flex flex-col">
                         <div className="w-full h-full flex flex-col gap-4 overflow-y-auto">
-                            <CartItem />
-                            <CartItem />
-                            <CartItem />
+                            {cartItemsQuery?.isLoading && <CartItemSkeleton />}
+                            {cartItemsQuery?.data?.map((item: CartItemType) => (
+                                <CartItem item={item} key={item._id} />
+                            ))}
                         </div>
                         <Spacer />
                         <Divider />
