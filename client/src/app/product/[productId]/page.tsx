@@ -13,7 +13,7 @@ type ProductPageProps = {
 
 const ProductPage = ({ params }: ProductPageProps) => {
     const productQuery = useQuery({
-        queryKey: ["product", "all"],
+        queryKey: ["products"],
         queryFn: getAllProducts,
     });
 

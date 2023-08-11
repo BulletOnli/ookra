@@ -21,7 +21,7 @@ const purchaseSchema = new mongoose.Schema(
             ref: "Product",
             required: true,
         },
-        price: {
+        totalSpent: {
             type: Number,
             required: true,
         },

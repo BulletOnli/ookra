@@ -31,6 +31,7 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
 
 export const addToCart = asyncHandler(async (req: Request, res: Response) => {
     const { productId } = req.query;
+    const { quantity } = req.body;
     const product = await Product.findById(productId).populate({
         path: "seller",
         select: ["-password"],
@@ -47,7 +48,7 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
 
     if (stocks > (isInCart?.inCart || 0)) {
         if (isInCart) {
-            isInCart.inCart++;
+            isInCart.inCart += quantity;
             await isInCart.save();
 
             res.status(200).json({ message: "+1 Item Quantity" });
@@ -58,7 +59,7 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
                 _id: product._id,
                 seller: seller._id,
                 price,
-                inCart: 1,
+                inCart: quantity,
                 cartOwner: req.user._id,
             });
             res.status(201).json({ message: "Added to cart" });
@@ -132,10 +133,9 @@ export const decItemQuantity = asyncHandler(
 export const cartCheckout = asyncHandler(
     async (req: Request, res: Response) => {
         const { userId } = req.query;
-
         const itemInCart = await Cart.find({ cartOwner: userId });
 
-        itemInCart.forEach(async (item) => {
+        for (let item of itemInCart) {
             const product = await Product.findById(item._id);
             const seller = await User.findById(item.seller);
             const totalCost = item.price * item.inCart;
@@ -152,25 +152,21 @@ export const cartCheckout = asyncHandler(
                     const purchaseItem = await Purchase.findById(item._id);
 
                     if (purchaseItem) {
-                        purchaseItem.price += item.price;
+                        // adds up to the existing item in purchase history
+                        purchaseItem.totalSpent += item.price * item.inCart;
                         await purchaseItem.save();
                     } else {
                         await Purchase.create({
                             productName: item.productName,
                             _id: item._id,
                             productImg: item.productImg,
-                            price: item.price,
+                            totalSpent: item.price * item.inCart,
                             purchaseOwner: item.cartOwner,
                         });
                     }
 
                     // remove all items in cart
                     await Cart.deleteMany({ cartOwner: userId });
-
-                    res.status(200).json({
-                        message: "Order success",
-                        totalCost,
-                    });
                 } else {
                     res.status(400);
                     throw new Error("Stocks not sufficient");
@@ -179,6 +175,10 @@ export const cartCheckout = asyncHandler(
                 res.status(404);
                 throw new Error("Checkout failed, product not found");
             }
+        }
+
+        res.status(200).json({
+            message: "Order success",
         });
     }
 );

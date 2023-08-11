@@ -18,7 +18,7 @@ import { useState } from "react";
 const ProductOverview = ({ productId }: { productId: string }) => {
     const toast = useToast();
     const queryClient = useQueryClient();
-    const [isLoading, setIsLoading] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const productQuery = useQuery({
         queryKey: ["product"],
@@ -27,7 +27,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
     const productData: ProductType = productQuery?.data;
 
     const addToCartMutation = useMutation({
-        mutationFn: addToCart,
+        mutationFn: () => addToCart(productId, quantity),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cartItems"] });
         },
@@ -35,7 +35,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
 
     const handleAddToCart = () => {
         try {
-            addToCartMutation.mutate(productId);
+            addToCartMutation.mutate();
             toast({
                 title: "Added to Cart",
                 status: "success",
@@ -52,7 +52,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                 title: err,
                 status: "error",
                 isClosable: true,
-                duration: 3000,
+                duration: 2000,
                 position: "top",
                 variant: "top-accent",
             });
@@ -70,7 +70,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                 boxShadow="sm"
             />
             <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full h-[80%] flex flex-col items-center justify-around gap-4 p-8 bg-white  shadow-sm rounded-xl">
+                <div className="w-full h-[80%] flex flex-col items-center justify-around gap-4 p-6 bg-white  shadow-sm rounded-xl">
                     <HStack w="full">
                         <h1 className="text-2xl font-bold ">
                             {productData?.productName}
@@ -100,7 +100,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                         </VStack>
                     </div>
 
-                    <div className="w-full flex justify-center gap-4 ">
+                    <HStack spacing={5}>
                         <Button
                             w="10rem"
                             rounded="full"
@@ -108,19 +108,47 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                             borderColor="black"
                             leftIcon={<BsCartPlus size={20} />}
                             onClick={handleAddToCart}
+                            isDisabled={addToCartMutation.isLoading}
                         >
                             Add to cart
                         </Button>
+                        <VStack>
+                            <p className="font-semibold">Quantity</p>
+                            <HStack>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() =>
+                                        setQuantity((prev) => prev - 1)
+                                    }
+                                    isDisabled={quantity <= 1}
+                                >
+                                    -
+                                </Button>
+                                <p className="px-3 py-1 bg-gray-100 rounded-md font-semibold">
+                                    {quantity}
+                                </p>
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() =>
+                                        setQuantity((prev) => prev + 1)
+                                    }
+                                >
+                                    +
+                                </Button>
+                            </HStack>
+                        </VStack>
+
                         <Button
                             w="10rem"
                             rounded="full"
                             colorScheme="blue"
-                            isLoading={isLoading}
-                            spinnerPlacement="start"
+                            isDisabled
                         >
                             Buy Now
                         </Button>
-                    </div>
+                    </HStack>
                 </div>
                 <div className="w-full h-[20%] flex items-center px-4 bg-white shadow-sm rounded-lg">
                     <HStack>
