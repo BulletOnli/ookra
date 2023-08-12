@@ -9,20 +9,20 @@ import {
 } from "@chakra-ui/react";
 
 type SuccessOrderProps = {
-    alertDisclosure: {
+    successDisclosure: {
         onClose: () => void;
         isOpen: boolean;
     };
 };
 
-const SuccessOrder = ({ alertDisclosure }: SuccessOrderProps) => {
+const SuccessOrder = ({ successDisclosure }: SuccessOrderProps) => {
     return (
         <div className="absolute bg-black bg-opacity-30 w-full h-screen flex justify-center items-center z-[100]">
             <div
                 className="absolute w-full h-screen z-10"
-                onClick={alertDisclosure.onClose}
+                onClick={successDisclosure.onClose}
             />
-            <ScaleFade initialScale={0.9} in={alertDisclosure.isOpen}>
+            <ScaleFade initialScale={0.9} in={successDisclosure.isOpen}>
                 <Alert
                     status="success"
                     variant="subtle"
@@ -39,7 +39,7 @@ const SuccessOrder = ({ alertDisclosure }: SuccessOrderProps) => {
                         position="absolute"
                         right={3}
                         top={3}
-                        onClick={alertDisclosure.onClose}
+                        onClick={successDisclosure.onClose}
                     />
                     <AlertIcon boxSize="50px" mr={0} />
                     <AlertTitle mt={4} mb={1} fontSize="xl">

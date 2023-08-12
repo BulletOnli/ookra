@@ -3,15 +3,12 @@ import { getAllProducts, getSingleProduct } from "@/src/api/productsApi";
 import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
 import ProductOverview from "@/src/components/product/ProductOverview";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
-type ProductPageProps = {
-    params: {
-        productId: string;
-    };
-};
+const ProductPage = () => {
+    const productId = useParams().productId as string;
 
-const ProductPage = ({ params }: ProductPageProps) => {
     const productQuery = useQuery({
         queryKey: ["products"],
         queryFn: getAllProducts,
@@ -23,9 +20,9 @@ const ProductPage = ({ params }: ProductPageProps) => {
                 <Link href="/">All Items</Link>
                 {" > "}
                 <Link href="#">Category</Link> {" > "}
-                {params.productId}
+                {productId}
             </p>
-            <ProductOverview productId={params.productId} />
+            <ProductOverview productId={productId} />
 
             <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>

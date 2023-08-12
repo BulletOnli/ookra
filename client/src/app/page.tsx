@@ -12,18 +12,20 @@ const Homepage = () => {
     });
 
     return (
-        <div className="w-full 2xl:w-[85vw] min-h-screen flex flex-col items-center py-6 px-4 lg:px-[5rem] 2xl:px-[10rem] ">
+        <div className="w-full lg:w-[85vw] 2xl:w-[65vw] min-h-screen flex flex-col items-center p-4">
             <div className="w-full h-[14rem] flex items-center gap-2 mt-4 overflow-hidden">
                 <div className="w-[65%] h-full">
                     <ImageSlider />
                 </div>
                 <div className="w-[35%] flex flex-col gap-2 ">
                     <Image
+                        loading="lazy"
                         alt="Banner"
                         src="/sidebanner1.png"
                         className="w-full h-[7rem] object-cover "
                     />
                     <Image
+                        loading="lazy"
                         alt="Banner"
                         src="/sidebanner2.png"
                         className="w-full h-[7rem] object-cover"

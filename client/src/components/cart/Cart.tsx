@@ -9,15 +9,17 @@ import {
     DrawerOverlay,
     HStack,
     Spacer,
+    VStack,
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
 import CartItem, { CartItemType } from "./CartItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cartCheckout, getCartItems, removeToCart } from "@/src/api/cartApi";
-import { UserType } from "@/src/stores/userStore";
+import { UserType } from "@/src/utils/stores/userStore";
 import CartItemSkeleton from "./CartItemSkeleton";
 import SuccessOrder from "../alerts/SuccessOrder";
+import ClearCartAlert from "../alerts/ClearCartAlert";
 
 type CartProps = {
     onClose: () => void;
@@ -28,17 +30,12 @@ type CartProps = {
 const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
     const queryClient = useQueryClient();
     const toast = useToast();
-    const alertDisclosure = useDisclosure();
+    const successDisclosure = useDisclosure();
+    const warningDisclosure = useDisclosure();
 
     const cartItemsQuery = useQuery({
-        queryKey: ["cartItems"],
-        queryFn: () => {
-            if (accountDetails) {
-                return getCartItems(accountDetails._id);
-            } else {
-                return null;
-            }
-        },
+        queryKey: ["cart"],
+        queryFn: getCartItems,
         enabled: accountDetails != null,
     });
 
@@ -53,10 +50,10 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
     );
 
     // Check out mutation
-    const placeOrder = useMutation({
+    const placeOrderMutation = useMutation({
         mutationFn: cartCheckout,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
             queryClient.invalidateQueries({ queryKey: ["product"] });
         },
     });
@@ -64,10 +61,10 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
     const handlePlaceOrder = async () => {
         try {
             if (accountDetails) {
-                placeOrder.mutate(accountDetails._id);
-                await new Promise((r) => setTimeout(r, 2000)); // Manually load for 2 sec
+                placeOrderMutation.mutate(accountDetails._id);
+                await new Promise((r) => setTimeout(r, 1500)); // Manually load for 2 sec
                 onClose();
-                alertDisclosure.onOpen();
+                successDisclosure.onOpen();
             } else {
                 throw new Error("Invalid");
             }
@@ -101,11 +98,15 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
                                 )}
                                 {cartItemsQuery?.data?.map(
                                     (item: CartItemType) => (
-                                        <CartItem item={item} key={item._id} />
+                                        <CartItem
+                                            item={item}
+                                            key={item._id}
+                                            onClose={onClose}
+                                        />
                                     )
                                 )}
                             </div>
-                            <Spacer />
+
                             <Divider />
                             <div className="w-full flex flex-col gap-4 mt-4">
                                 <HStack>
@@ -120,25 +121,41 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
                                         </p>
                                     </HStack>
                                 </HStack>
-                                <Button
-                                    colorScheme="blue"
-                                    onClick={handlePlaceOrder}
-                                    isLoading={placeOrder.isLoading}
-                                    spinnerPlacement="start"
-                                    isDisabled={
-                                        cartItemsQuery?.data?.length === 0
-                                    }
-                                >
-                                    Place order
-                                </Button>
+
+                                <VStack>
+                                    <Button
+                                        w="full"
+                                        colorScheme="blue"
+                                        onClick={handlePlaceOrder}
+                                        isLoading={placeOrderMutation.isLoading}
+                                        spinnerPlacement="start"
+                                        isDisabled={
+                                            cartItemsQuery?.data?.length === 0
+                                        }
+                                    >
+                                        Place order
+                                    </Button>
+                                    <Button
+                                        w="full"
+                                        colorScheme="red"
+                                        onClick={warningDisclosure.onOpen}
+                                        isDisabled={
+                                            cartItemsQuery?.data?.length === 0
+                                        }
+                                    >
+                                        Remove all items
+                                    </Button>
+                                </VStack>
                             </div>
                         </div>
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
 
-            {alertDisclosure.isOpen && (
-                <SuccessOrder alertDisclosure={alertDisclosure} />
+            <ClearCartAlert warningDisclosure={warningDisclosure} />
+
+            {successDisclosure.isOpen && (
+                <SuccessOrder successDisclosure={successDisclosure} />
             )}
         </>
     );

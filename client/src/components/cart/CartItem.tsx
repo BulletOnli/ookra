@@ -1,5 +1,6 @@
 import { removeToCart } from "@/src/api/cartApi";
-import { Button, Flex, IconButton, Image, Spacer } from "@chakra-ui/react";
+import useUserStore from "@/src/utils/stores/userStore";
+import { Flex, IconButton, Image, Spacer } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
@@ -18,29 +19,37 @@ export type CartItemType = {
     };
 };
 
-const CartItem = ({ item }: { item: CartItemType }) => {
+type CartItemProps = {
+    item: CartItemType;
+    onClose: () => void;
+};
+
+const CartItem = ({ item, onClose }: CartItemProps) => {
     const queryClient = useQueryClient();
-    const [isLoading, setIsLoading] = useState(false);
+    const { accountDetails } = useUserStore();
 
     const removeCartItem = useMutation({
         mutationFn: removeToCart,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+            queryClient.invalidateQueries({
+                queryKey: ["cart"],
+            });
         },
     });
 
     return (
         <div className="w-full flex items-center gap-4">
             <div className="w-full flex items-center bg-slate-100 shadow p-2 rounded-lg">
-                <Link href={`/product/${item._id}`}>
+                <Link href={`/product/${item._id}`} onClick={onClose}>
                     <div className="relative">
                         <Image
-                            // src={item.productImg.url}
+                            src={item.productImg.url}
                             fallbackSrc="https://via.placeholder.com/300"
                             objectFit="cover"
                             alt="Product Img"
                             boxSize="80px"
                             rounded="md"
+                            loading="lazy"
                         />
                         <div className="absolute -top-2 z-30 -right-2 h-6 w-6 text-sm font-semibold text-white flex justify-center items-center rounded-full bg-gray-600 ">
                             {item.inCart}
@@ -48,7 +57,7 @@ const CartItem = ({ item }: { item: CartItemType }) => {
                     </div>
                 </Link>
                 <Flex flexDirection="column" ml={3}>
-                    <Link href={`/product/${item._id}`}>
+                    <Link href={`/product/${item._id}`} onClick={onClose}>
                         <p className="text font-semibold">{item.productName}</p>
                     </Link>
                     <p className="text-sm text-gray-700">

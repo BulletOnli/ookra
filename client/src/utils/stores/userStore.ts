@@ -7,6 +7,7 @@ export type UserType = {
     username: string;
     password: string;
     totalSales?: number;
+    location?: string;
     _id: string;
 };
 

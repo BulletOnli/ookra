@@ -1,62 +1,49 @@
 "use client";
-import { registerUser } from "@/src/api/userApi";
-import { Button, HStack, Image, Input, useToast } from "@chakra-ui/react";
+import { loginUser } from "@/src/api/userApi";
+import {
+    Button,
+    Divider,
+    FormControl,
+    HStack,
+    Image,
+    Input,
+    useToast,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, ChangeEvent, FormEvent } from "react";
 
-const Registerpage = () => {
+const LoginPage = () => {
     const router = useRouter();
     const toast = useToast();
-    const [registerDetails, setRegisterDetails] = useState({
-        firstName: "",
-        lastName: "",
-        username: "",
-        password: "",
-        location: "",
-    });
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.currentTarget;
-        setRegisterDetails((state) => ({
-            ...state,
-            [name]: value,
-        }));
-    };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            await registerUser(registerDetails);
-            setRegisterDetails({
-                firstName: "",
-                lastName: "",
-                username: "",
-                password: "",
-                location: "",
-            });
+            await loginUser({ username, password });
+
             toast({
-                title: "Registration Complete",
+                title: "Login Success",
                 status: "success",
                 isClosable: true,
                 duration: 3000,
                 position: "top",
-                variant: "top-accent",
+                variant: "subtle",
             });
             router.push("/");
         } catch (error: any) {
             console.log(error);
-            const err =
-                error.response.data.error.message || "An error occurred";
             toast({
-                title: err,
+                title: "Wrong username or password",
                 status: "error",
                 isClosable: true,
                 duration: 3000,
                 position: "top",
-                variant: "top-accent",
+                variant: "solid",
             });
         } finally {
             setIsLoading(false);
@@ -80,43 +67,29 @@ const Registerpage = () => {
 
             <div className="w-[60rem] h-[30rem] flex justify-center rounded-xl bg-white shadow-custom p-6">
                 <div className="w-[50%] h-full flex justify-center items-center">
-                    <Image src="/illu.svg" w="25rem" />
+                    <Image src="/illu.svg" w="25rem" loading="lazy" />
                 </div>
 
                 <div className="w-[50%] h-full flex flex-col items-center justify-center p-6">
                     <p className="text-2xl font-semibold mb-6">
-                        Create your account
+                        Login to your account
                     </p>
                     <form onSubmit={handleSubmit}>
-                        <HStack mb={4}>
-                            <Input
-                                type="text"
-                                placeholder="First Name"
-                                name="firstName"
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <Input
-                                type="text"
-                                placeholder="Last Name"
-                                name="lastName"
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </HStack>
                         <Input
                             type="text"
                             placeholder="Username"
                             mb={4}
                             name="username"
-                            onChange={handleInputChange}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             required
                         />
                         <Input
                             type="password"
                             placeholder="Password"
                             name="password"
-                            onChange={handleInputChange}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                         <Button
@@ -127,16 +100,16 @@ const Registerpage = () => {
                             isLoading={isLoading}
                             spinnerPlacement="start"
                         >
-                            Create account
+                            Log in
                         </Button>
                     </form>
                     <small className="w-full text-center mt-2">
-                        Already have an account?{" "}
+                        Dont have an account?{" "}
                         <Link
-                            href="/login"
+                            href="/register"
                             className="font-semibold text-blue-600 hover:underline"
                         >
-                            Login
+                            Register
                         </Link>
                     </small>
                 </div>
@@ -145,4 +118,4 @@ const Registerpage = () => {
     );
 };
 
-export default Registerpage;
+export default LoginPage;

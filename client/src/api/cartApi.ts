@@ -2,8 +2,18 @@ import axios from "axios";
 
 const API = "http://localhost:5050/cart";
 
-export const getCartItems = async (userId: string) => {
-    const response = await axios.get(`${API}/all?userId=${userId}`, {
+export const getCartItems = async () => {
+    const response = await axios.get(`${API}/all`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+        },
+    });
+
+    return response.data;
+};
+
+export const clearCart = async () => {
+    const response = await axios.delete(`${API}/remove/all`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
         },

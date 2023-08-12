@@ -17,7 +17,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
         <QueryClientProvider client={queryClient}>
             <NextTopLoader />
             <ChakraProvider>
-                <div className="w-full min-h-screen flex flex-col items-center bg-[#EBEAF3]">
+                <div className="w-full min-h-screen flex flex-col items-center bg-[#EBEAF3] font-roboto">
                     {!hideComponents && <Navbar />}
                     {children}
                     <Footer />

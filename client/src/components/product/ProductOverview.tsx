@@ -14,6 +14,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSingleProduct } from "@/src/api/productsApi";
 import { addToCart } from "@/src/api/cartApi";
 import { useState } from "react";
+import Link from "next/link";
+import useUserStore from "@/src/utils/stores/userStore";
 
 const ProductOverview = ({ productId }: { productId: string }) => {
     const toast = useToast();
@@ -21,7 +23,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
     const [quantity, setQuantity] = useState(1);
 
     const productQuery = useQuery({
-        queryKey: ["product"],
+        queryKey: ["product", productId],
         queryFn: () => getSingleProduct(productId),
     });
     const productData: ProductType = productQuery?.data;
@@ -29,7 +31,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
     const addToCartMutation = useMutation({
         mutationFn: () => addToCart(productId, quantity),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["cartItems"] });
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
         },
     });
 
@@ -62,12 +64,13 @@ const ProductOverview = ({ productId }: { productId: string }) => {
     return (
         <div className="w-full h-full flex justify-center gap-4">
             <Image
-                // src={productData?.productImg?.url}
+                src={productData?.productImg?.url}
                 fallbackSrc="https://via.placeholder.com/500"
                 objectFit="cover"
                 boxSize="30rem"
                 rounded="xl"
                 boxShadow="sm"
+                loading="lazy"
             />
             <div className="w-full flex flex-col items-center gap-2">
                 <div className="w-full h-[80%] flex flex-col items-center justify-around gap-4 p-6 bg-white  shadow-sm rounded-xl">
@@ -167,6 +170,8 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                         leftIcon={<FaStoreAlt size={18} />}
                         variant="outline"
                         size="sm"
+                        as={Link}
+                        href={`/user/${productData?.seller?._id}`}
                     >
                         View Shop
                     </Button>

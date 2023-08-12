@@ -1,13 +1,4 @@
-import { CartItemType } from "@/src/types/products";
-import {
-    Flex,
-    Image,
-    Spacer,
-    Skeleton,
-    SkeletonCircle,
-    SkeletonText,
-    Box,
-} from "@chakra-ui/react";
+import { SkeletonCircle, SkeletonText, Box } from "@chakra-ui/react";
 
 const CartItemSkeleton = () => {
     return (

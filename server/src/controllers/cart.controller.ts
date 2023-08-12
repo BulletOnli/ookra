@@ -7,9 +7,9 @@ import Purchase from "../models/purchaseModel";
 
 export const getCartItems = asyncHandler(
     async (req: Request, res: Response) => {
-        const { userId } = req.query;
+        const { _id } = req.user;
 
-        const cartItems = await Cart.find({ cartOwner: userId }).sort({
+        const cartItems = await Cart.find({ cartOwner: _id }).sort({
             updatedAt: "desc",
         });
 
@@ -18,10 +18,10 @@ export const getCartItems = asyncHandler(
 );
 
 export const clearCart = asyncHandler(async (req: Request, res: Response) => {
-    const { userId } = req.query;
+    const { _id } = req.user;
 
     try {
-        await Cart.deleteMany({ cartOwner: userId });
+        await Cart.deleteMany({ cartOwner: _id });
         res.status(200).json({ message: "Cart items cleared" });
     } catch (error) {
         res.status(400);
@@ -147,7 +147,9 @@ export const cartCheckout = asyncHandler(
                     await product.save();
                     // add the total sales to seller's profile
                     seller.totalSales += totalCost;
+                    seller.totalSales.toFixed(2);
                     await seller.save();
+
                     // add the new purchase to user's purchase history
                     const purchaseItem = await Purchase.findById(item._id);
 

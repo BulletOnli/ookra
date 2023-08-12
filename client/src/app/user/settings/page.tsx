@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { BsCamera } from "react-icons/bs";
 
-const UserPage = () => {
+const UserSettingsPage = () => {
     return (
         <div className="w-full h-[70vh] flex items-center justify-center p-4">
             <div className="w-[40rem] flex flex-col items-center p-4 bg-white rounded-lg">
@@ -44,4 +44,4 @@ const UserPage = () => {
     );
 };
 
-export default UserPage;
+export default UserSettingsPage;

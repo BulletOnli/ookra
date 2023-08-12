@@ -10,7 +10,7 @@ import protectRoute from "../middleware/protectRoute";
 const userRouter = express.Router();
 
 userRouter.get("/account/details", protectRoute, getAccountDetails);
-userRouter.get("/seller/details", getUserDetails);
+userRouter.get("/details", getUserDetails);
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 

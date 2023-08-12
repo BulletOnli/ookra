@@ -8,6 +8,12 @@ export const getAllProducts = async () => {
     return response.data;
 };
 
+export const getSellerProducts = async (sellerId: string) => {
+    const response = await axios.get(`${API}/all?sellerId=${sellerId}`);
+
+    return response.data;
+};
+
 export const getSingleProduct = async (productId: string) => {
     const response = await axios.get(`${API}?productId=${productId}`);
 

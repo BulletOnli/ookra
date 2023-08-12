@@ -12,10 +12,10 @@ import {
 import protectRoute from "../middleware/protectRoute";
 
 cartRouter.get("/all", protectRoute, getCartItems);
-cartRouter.delete("/all/remove", protectRoute, clearCart);
 
 cartRouter.post("/add", protectRoute, addToCart);
 cartRouter.delete("/remove", protectRoute, removeToCart);
+cartRouter.delete("/remove/all", protectRoute, clearCart);
 
 cartRouter.put("/item/increase", protectRoute, incItemQuantity);
 cartRouter.put("/item/decrease", protectRoute, decItemQuantity);

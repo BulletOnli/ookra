@@ -10,8 +10,24 @@ const generateToken = (_id: string) => {
     });
 };
 
-export const getAccountDetails = asyncHandler(async (req, res) => {
-    res.status(200).json(req.user);
+export const loginUser = asyncHandler(async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    if (!user) {
+        res.status(404);
+        throw new Error("Username doesn't exists");
+    }
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+        res.status(200).json({
+            userId: user._id,
+            token: generateToken(user._id.toString()),
+        });
+    } else {
+        res.status(400);
+        throw new Error("Wrong password");
+    }
 });
 
 export const registerUser = asyncHandler(
@@ -45,26 +61,14 @@ export const registerUser = asyncHandler(
     }
 );
 
-export const loginUser = asyncHandler(async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+// Details of the account logged in
+export const getAccountDetails = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).select("-password");
 
-    if (!user) {
-        res.status(404);
-        throw new Error("Username doesn't exists");
-    }
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-        res.status(200).json({
-            userId: user._id,
-            token: generateToken(user._id.toString()),
-        });
-    } else {
-        res.status(400);
-        throw new Error("Wrong password");
-    }
+    res.status(200).json(user);
 });
 
+// Details of the specific user
 export const getUserDetails = asyncHandler(
     async (req: Request, res: Response) => {
         const { userId } = req.query;

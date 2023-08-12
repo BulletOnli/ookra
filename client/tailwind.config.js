@@ -16,7 +16,7 @@ module.exports = {
                 custom: "0 1px 4px rgb(0, 0, 0, .2);",
             },
             fontFamily: {
-                roboto: "Roboto, sans-serif;",
+                roboto: "Inter, sans-serif",
             },
         },
     },

@@ -10,6 +10,7 @@ import {
     MenuItem,
     MenuList,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { BsSearch, BsCart2, BsCreditCard, BsGear } from "react-icons/bs";
@@ -17,12 +18,13 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import useUserStore from "@/src/stores/userStore";
+import useUserStore from "@/src/utils/stores/userStore";
 import { useRouter } from "next/navigation";
 
 const Cart = dynamic(() => import("./cart/Cart"));
 
 const Navbar = () => {
+    const toast = useToast();
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { accountDetails, getAccountDetails, logoutUser } = useUserStore();
@@ -33,6 +35,15 @@ const Navbar = () => {
 
     const handleLogout = () => {
         logoutUser();
+        toast({
+            title: "Logout successfully",
+            status: "success",
+            isClosable: true,
+            duration: 3000,
+            position: "top",
+            variant: "subtle",
+        });
+
         router.push("/login");
     };
 
@@ -89,7 +100,7 @@ const Navbar = () => {
                                 <MenuItem
                                     icon={<FaUserCircle size={17} />}
                                     as={Link}
-                                    href={`/user/${accountDetails?.username}`}
+                                    href={`/user/${accountDetails?._id}`}
                                     className="hover:bg-gray-100"
                                 >
                                     My Account
@@ -101,8 +112,10 @@ const Navbar = () => {
                                     My Purchase
                                 </MenuItem>
                                 <MenuItem
+                                    as={Link}
                                     icon={<BsGear size={17} />}
                                     className="hover:bg-gray-100"
+                                    href="/user/settings"
                                 >
                                     Settings
                                 </MenuItem>
