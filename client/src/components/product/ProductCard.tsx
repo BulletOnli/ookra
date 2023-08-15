@@ -55,7 +55,7 @@ const ProductCard = ({ productData }: { productData: ProductType }) => {
                         <BsStarFill className="text-xs text-gray-400" />
                         <BsStarFill className="text-xs text-gray-400" />
                         <small className="font-semibold ml-1">
-                            {sold}k Sold
+                            {sold} Sold
                         </small>
                     </HStack>
 

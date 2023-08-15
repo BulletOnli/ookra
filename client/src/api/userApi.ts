@@ -23,29 +23,3 @@ export const fetchUserDetails = async (userId: string) => {
 
     return response.data;
 };
-
-type RegisterDetailsType = {
-    firstName: string;
-    lastName: string;
-    username: string;
-    password: string;
-};
-
-export const registerUser = async (data: RegisterDetailsType) => {
-    const response = await axios.post(`${API}/register`, data);
-
-    if (response.data.token) {
-        localStorage.setItem("ookraToken", response.data.token);
-    }
-};
-
-export const loginUser = async (data: {
-    username: string;
-    password: string;
-}) => {
-    const response = await axios.post(`${API}/login`, data);
-
-    if (response.data.token) {
-        localStorage.setItem("ookraToken", response.data.token);
-    }
-};

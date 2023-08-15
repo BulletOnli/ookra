@@ -144,6 +144,7 @@ export const cartCheckout = asyncHandler(
                 if (item.inCart <= product.stocks) {
                     // reduce the stocks of the product
                     product.stocks -= item.inCart;
+                    product.sold += item.inCart;
                     await product.save();
                     // add the total sales to seller's profile
                     seller.totalSales += totalCost;

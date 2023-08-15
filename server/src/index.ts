@@ -6,8 +6,10 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
 import errorHandler from "./middleware/errorHandler";
+import cookieParser from "cookie-parser";
 
 import userRouter from "./routes/user.routes";
+import authRouter from "./routes/auth.routes";
 import productRouter from "./routes/product.routes";
 import cartRouter from "./routes/cart.routes";
 import purchaseRouter from "./routes/purchase.routes";
@@ -19,16 +21,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
     cors({
-        origin: "*",
+        origin: "http://localhost:3000",
+        credentials: true,
     })
 );
 app.use(helmet());
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
+app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);

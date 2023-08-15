@@ -20,14 +20,18 @@ import { UserType } from "@/src/utils/stores/userStore";
 import CartItemSkeleton from "./CartItemSkeleton";
 import SuccessOrder from "../alerts/SuccessOrder";
 import ClearCartAlert from "../alerts/ClearCartAlert";
+import { useEffect } from "react";
+import { isTokenAvailable } from "@/src/utils/checkAccessToken";
+import { useRouter } from "next/navigation";
 
 type CartProps = {
     onClose: () => void;
     isOpen: boolean;
-    accountDetails: UserType | null;
+    accountDetails: UserType;
 };
 
 const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
+    const router = useRouter();
     const queryClient = useQueryClient();
     const toast = useToast();
     const successDisclosure = useDisclosure();
@@ -51,37 +55,36 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
 
     // Check out mutation
     const placeOrderMutation = useMutation({
-        mutationFn: cartCheckout,
+        mutationFn: () => cartCheckout(accountDetails._id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cart"] });
             queryClient.invalidateQueries({ queryKey: ["product"] });
-        },
-    });
+            queryClient.invalidateQueries({ queryKey: ["products"] });
 
-    const handlePlaceOrder = async () => {
-        try {
-            if (accountDetails) {
-                placeOrderMutation.mutate(accountDetails._id);
-                await new Promise((r) => setTimeout(r, 1500)); // Manually load for 2 sec
-                onClose();
-                successDisclosure.onOpen();
-            } else {
-                throw new Error("Invalid");
-            }
-        } catch (error: any) {
-            console.log(error);
-            const err =
-                error.response.data.error.message || "An error occurred";
+            onClose();
+            successDisclosure.onOpen();
+        },
+        onError: (err) => {
+            console.log(err);
             toast({
-                title: err,
+                title: "An error occurred",
                 status: "error",
                 isClosable: true,
                 duration: 3000,
                 position: "top",
                 variant: "top-accent",
             });
-        }
-    };
+        },
+    });
+
+    useEffect(() => {
+        const checkToken = async () => {
+            if (!(await isTokenAvailable())) {
+                router.push("/login");
+            }
+        };
+        checkToken();
+    }, []);
 
     return (
         <>
@@ -126,7 +129,9 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
                                     <Button
                                         w="full"
                                         colorScheme="blue"
-                                        onClick={handlePlaceOrder}
+                                        onClick={() =>
+                                            placeOrderMutation.mutate()
+                                        }
                                         isLoading={placeOrderMutation.isLoading}
                                         spinnerPlacement="start"
                                         isDisabled={

@@ -3,9 +3,9 @@ import protectRoute from "../middleware/protectRoute";
 import asyncHandler from "express-async-handler";
 import Purchase from "../models/purchaseModel";
 
-const purchaseRouter = express.Router();
+const router = express.Router();
 
-purchaseRouter.get(
+router.get(
     "/all",
     protectRoute,
     asyncHandler(async (req: Request, res: Response) => {
@@ -16,4 +16,4 @@ purchaseRouter.get(
     })
 );
 
-export default purchaseRouter;
+export default router;

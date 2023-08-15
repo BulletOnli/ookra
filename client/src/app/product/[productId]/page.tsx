@@ -4,9 +4,12 @@ import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
 import ProductOverview from "@/src/components/product/ProductOverview";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 
 const ProductPage = () => {
+    const router = useRouter();
     const productId = useParams().productId as string;
 
     const productQuery = useQuery({
@@ -14,12 +17,22 @@ const ProductPage = () => {
         queryFn: getAllProducts,
     });
 
+    useEffect(() => {
+        const checkToken = async () => {
+            if (!(await isTokenAvailable())) {
+                router.push("/login");
+            }
+        };
+
+        checkToken();
+    }, []);
+
     return (
         <div className="w-[80vw] 2xl:w-[60vw] flex flex-col items-center p-6 mb-6">
             <p className="w-full text-lg font-semibold text-gray-800 mb-4">
                 <Link href="/">All Items</Link>
-                {" > "}
-                <Link href="#">Category</Link> {" > "}
+                {" - "}
+                <Link href="#">Category</Link> {" - "}
                 {productId}
             </p>
             <ProductOverview productId={productId} />

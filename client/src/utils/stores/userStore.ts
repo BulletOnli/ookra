@@ -1,5 +1,7 @@
 import { fetchAccountDetails } from "@/src/api/userApi";
 import { create } from "zustand";
+import { isTokenAvailable } from "../checkAccessToken";
+import { logoutUser } from "@/src/api/authApi";
 
 export type UserType = {
     firstName: string;
@@ -22,11 +24,15 @@ const useUserStore = create<UserState>((set) => ({
     getAccountDetails: async () => {
         const response = await fetchAccountDetails();
 
-        if (response) {
+        if ((await isTokenAvailable()) && response) {
             set({ accountDetails: response });
+        } else {
+            set({ accountDetails: null });
         }
     },
-    logoutUser: () => {
+    logoutUser: async () => {
+        const response = await logoutUser();
+
         localStorage.removeItem("ookraToken");
         set({ accountDetails: null });
     },

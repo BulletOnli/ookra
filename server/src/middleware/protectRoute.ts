@@ -6,13 +6,14 @@ import User from "../models/userModel";
 
 const protectRoute = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-        let token: string;
-        const authHeader = req.headers["authorization"];
+        const token = req.headers["authorization"]?.split(" ")[1];
 
-        if (authHeader) {
+        if (token) {
             try {
-                token = authHeader.split(" ")[1];
-                const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+                const decoded = jwt.verify(
+                    token,
+                    process.env.ACCESS_TOKEN_SECRET!
+                ) as {
                     _id: string;
                 };
                 req.user = await User.findById(decoded._id).select("-password");

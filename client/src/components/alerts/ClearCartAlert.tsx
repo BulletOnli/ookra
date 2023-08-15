@@ -26,22 +26,32 @@ const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
 
     const clearCartMutation = useMutation({
         mutationFn: clearCart,
-        onSuccess: () => queryClient.invalidateQueries(["cart"]),
+        onSuccess: () => {
+            queryClient.invalidateQueries(["cart"]);
+
+            warningDisclosure.onClose();
+
+            toast({
+                title: "Clear cart success",
+                status: "success",
+                isClosable: true,
+                duration: 2000,
+                position: "top",
+                variant: "subtle",
+            });
+        },
+        onError: (err) => {
+            console.log(err);
+            toast({
+                title: "An error occurred",
+                status: "error",
+                isClosable: true,
+                duration: 3000,
+                position: "top",
+                variant: "top-accent",
+            });
+        },
     });
-
-    const handleClick = () => {
-        clearCartMutation.mutate();
-        warningDisclosure.onClose();
-
-        toast({
-            title: "Clear cart success",
-            status: "success",
-            isClosable: true,
-            duration: 2000,
-            position: "top",
-            variant: "subtle",
-        });
-    };
 
     return (
         <AlertDialog
@@ -52,11 +62,11 @@ const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        Delete Customer
+                        Remove all items
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        Are you sure? You can't undo this action afterwards.
+                        Are you sure? You cant undo this action afterwards.
                     </AlertDialogBody>
 
                     <AlertDialogFooter>
@@ -66,7 +76,11 @@ const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
                         >
                             Cancel
                         </Button>
-                        <Button colorScheme="red" onClick={handleClick} ml={3}>
+                        <Button
+                            colorScheme="red"
+                            onClick={() => clearCartMutation.mutate()}
+                            ml={3}
+                        >
                             Delete
                         </Button>
                     </AlertDialogFooter>

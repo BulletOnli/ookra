@@ -23,7 +23,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
     const [quantity, setQuantity] = useState(1);
 
     const productQuery = useQuery({
-        queryKey: ["product", productId],
+        queryKey: ["product"],
         queryFn: () => getSingleProduct(productId),
     });
     const productData: ProductType = productQuery?.data;
@@ -32,12 +32,6 @@ const ProductOverview = ({ productId }: { productId: string }) => {
         mutationFn: () => addToCart(productId, quantity),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cart"] });
-        },
-    });
-
-    const handleAddToCart = () => {
-        try {
-            addToCartMutation.mutate();
             toast({
                 title: "Added to Cart",
                 status: "success",
@@ -46,20 +40,19 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                 position: "top-right",
                 variant: "left-accent",
             });
-        } catch (error: any) {
-            console.log(error);
-            const err =
-                error.response.data.error.message || "An error occurred";
+        },
+        onError: (err) => {
+            console.log(err);
             toast({
-                title: err,
+                title: "An error occurred",
                 status: "error",
                 isClosable: true,
-                duration: 2000,
+                duration: 3000,
                 position: "top",
                 variant: "top-accent",
             });
-        }
-    };
+        },
+    });
 
     return (
         <div className="w-full h-full flex justify-center gap-4">
@@ -99,7 +92,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                         </VStack>
                         <VStack spacing={0}>
                             <p className="font-semibold">Sold</p>
-                            <p>{productData?.sold}k</p>
+                            <p>{productData?.sold}</p>
                         </VStack>
                     </div>
 
@@ -110,7 +103,7 @@ const ProductOverview = ({ productId }: { productId: string }) => {
                             variant="outline"
                             borderColor="black"
                             leftIcon={<BsCartPlus size={20} />}
-                            onClick={handleAddToCart}
+                            onClick={() => addToCartMutation.mutate()}
                             isDisabled={addToCartMutation.isLoading}
                         >
                             Add to cart

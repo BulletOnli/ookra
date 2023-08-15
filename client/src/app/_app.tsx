@@ -6,6 +6,8 @@ import Footer from "@/src/components/Footer";
 import { usePathname } from "next/navigation";
 import NextTopLoader from "nextjs-toploader";
 import Navbar from "@/src/components/Navbar";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +21,7 @@ const App = ({ children }: { children: React.ReactNode }) => {
             <ChakraProvider>
                 <div className="w-full min-h-screen flex flex-col items-center bg-[#EBEAF3] font-roboto">
                     {!hideComponents && <Navbar />}
-                    {children}
+                    <Suspense fallback={<Loading />}>{children}</Suspense>
                     <Footer />
                 </div>
                 <ReactQueryDevtools initialIsOpen={false} />

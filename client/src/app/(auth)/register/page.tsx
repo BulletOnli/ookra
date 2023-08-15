@@ -1,5 +1,5 @@
 "use client";
-import { registerUser } from "@/src/api/userApi";
+import { registerUser } from "@/src/api/authApi";
 import { Button, HStack, Image, Input, useToast } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +13,7 @@ const Registerpage = () => {
         lastName: "",
         username: "",
         password: "",
+        confirmPassword: "",
         location: "",
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +36,7 @@ const Registerpage = () => {
                 lastName: "",
                 username: "",
                 password: "",
+                confirmPassword: "",
                 location: "",
             });
             toast({
@@ -115,7 +117,15 @@ const Registerpage = () => {
                         <Input
                             type="password"
                             placeholder="Password"
+                            mb={4}
                             name="password"
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <Input
+                            type="password"
+                            placeholder="Confirm Password"
+                            name="confirmPassword"
                             onChange={handleInputChange}
                             required
                         />

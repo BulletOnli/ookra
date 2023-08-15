@@ -1,9 +1,7 @@
 import { removeToCart } from "@/src/api/cartApi";
-import useUserStore from "@/src/utils/stores/userStore";
-import { Flex, IconButton, Image, Spacer } from "@chakra-ui/react";
+import { Flex, IconButton, Image, Spacer, useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 
 export type CartItemType = {
@@ -25,14 +23,23 @@ type CartItemProps = {
 };
 
 const CartItem = ({ item, onClose }: CartItemProps) => {
+    const toast = useToast();
     const queryClient = useQueryClient();
-    const { accountDetails } = useUserStore();
 
     const removeCartItem = useMutation({
-        mutationFn: removeToCart,
+        mutationFn: () => removeToCart(item._id),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["cart"],
+            });
+
+            toast({
+                title: "You removed an item",
+                status: "success",
+                isClosable: true,
+                duration: 2000,
+                position: "top",
+                variant: "subtle",
             });
         },
     });
@@ -74,7 +81,7 @@ const CartItem = ({ item, onClose }: CartItemProps) => {
                 colorScheme="red"
                 size="sm"
                 icon={<FaTrash />}
-                onClick={() => removeCartItem.mutate(item._id)}
+                onClick={() => removeCartItem.mutate()}
                 isDisabled={removeCartItem.isLoading}
             />
         </div>

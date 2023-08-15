@@ -1,17 +1,9 @@
 "use client";
-import { loginUser } from "@/src/api/userApi";
-import {
-    Button,
-    Divider,
-    FormControl,
-    HStack,
-    Image,
-    Input,
-    useToast,
-} from "@chakra-ui/react";
+import { loginUser } from "@/src/api/authApi";
+import { Button, Image, Input, useToast } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
 const LoginPage = () => {
     const router = useRouter();

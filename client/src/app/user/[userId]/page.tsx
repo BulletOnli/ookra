@@ -2,6 +2,7 @@
 import { getAllProducts, getSellerProducts } from "@/src/api/productsApi";
 import { fetchUserDetails } from "@/src/api/userApi";
 import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
+import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 import { UserType } from "@/src/utils/stores/userStore";
 import {
     Avatar,
@@ -15,8 +16,8 @@ import {
     Tabs,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import React from "react";
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 
 const UserProfilePage = () => {

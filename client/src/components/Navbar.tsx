@@ -20,6 +20,9 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import useUserStore from "@/src/utils/stores/userStore";
 import { useRouter } from "next/navigation";
+import { isTokenAvailable } from "../utils/checkAccessToken";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { logoutUser } from "../api/authApi";
 
 const Cart = dynamic(() => import("./cart/Cart"));
 
@@ -28,10 +31,6 @@ const Navbar = () => {
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { accountDetails, getAccountDetails, logoutUser } = useUserStore();
-
-    useEffect(() => {
-        getAccountDetails();
-    }, []);
 
     const handleLogout = () => {
         logoutUser();
@@ -46,6 +45,14 @@ const Navbar = () => {
 
         router.push("/login");
     };
+
+    useEffect(() => {
+        getAccountDetails();
+        const checkToken = async () => {
+            await isTokenAvailable();
+        };
+        checkToken();
+    }, []);
 
     return (
         <>
@@ -132,11 +139,13 @@ const Navbar = () => {
                 </HStack>
             </nav>
 
-            <Cart
-                isOpen={isOpen}
-                onClose={onClose}
-                accountDetails={accountDetails}
-            />
+            {accountDetails && (
+                <Cart
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    accountDetails={accountDetails}
+                />
+            )}
         </>
     );
 };
