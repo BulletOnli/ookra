@@ -1,5 +1,5 @@
 "use client";
-import { getAllProducts, getSingleProduct } from "@/src/api/productsApi";
+import { getSellerProducts, getSingleProduct } from "@/src/api/productsApi";
 import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
 import ProductOverview from "@/src/components/product/ProductOverview";
 import Link from "next/link";
@@ -12,9 +12,17 @@ const ProductPage = () => {
     const router = useRouter();
     const productId = useParams().productId as string;
 
-    const productQuery = useQuery({
-        queryKey: ["products"],
-        queryFn: getAllProducts,
+    // Single product
+    const singleProductQuery = useQuery({
+        queryKey: ["product", productId],
+        queryFn: () => getSingleProduct(productId),
+    });
+
+    // Seller other products
+    const sellerProductsQuery = useQuery({
+        queryKey: ["products", singleProductQuery?.data?.seller?._id],
+        queryFn: () => getSellerProducts(singleProductQuery?.data?.seller?._id),
+        enabled: singleProductQuery?.data != undefined,
     });
 
     useEffect(() => {
@@ -35,12 +43,15 @@ const ProductPage = () => {
                 <Link href="#">Category</Link> {" - "}
                 {productId}
             </p>
-            <ProductOverview productId={productId} />
+            <ProductOverview productData={singleProductQuery?.data} />
 
             <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>
                 <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-2 lg:gap-8">
-                    {productQuery?.data
+                    {sellerProductsQuery?.isLoading && (
+                        <h1>Loading porducssdfsdf</h1>
+                    )}
+                    {sellerProductsQuery?.data
                         ?.slice(0, 10)
                         .map((product: ProductType) => (
                             <ProductCard

@@ -4,12 +4,19 @@ import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
 import ImageSlider from "@/src/components/ImageSlider";
 import { Image } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { isTokenAvailable } from "../utils/checkAccessToken";
 
 const Homepage = () => {
     const productQuery = useQuery({
         queryKey: ["products"],
         queryFn: getAllProducts,
     });
+
+    useEffect(() => {
+        const checkToken = async () => await isTokenAvailable();
+        checkToken();
+    }, []);
 
     return (
         <div className="w-full lg:w-[85vw] 2xl:w-[65vw] min-h-screen flex flex-col items-center p-4">

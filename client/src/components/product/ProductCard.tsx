@@ -17,7 +17,7 @@ export type ProductType = {
     sold: number;
     createdAt?: string;
     updatedAt?: string;
-    seller: {
+    seller?: {
         _id: string;
         firstName: string;
         lastName: string;
@@ -32,7 +32,7 @@ const ProductCard = ({ productData }: { productData: ProductType }) => {
 
     return (
         <Link href={`/product/${_id}`}>
-            <div className="relative w-[14rem] h-full min-h-[18rem]  bg-white flex flex-col rounded-md shadow-custom overflow-hidden hover:scale-[1.01] hover:shadow-md transition">
+            <div className="relative w-[14rem] h-[20rem] bg-white flex flex-col rounded-md shadow-custom overflow-hidden hover:scale-[1.01] hover:shadow-md transition">
                 <p className="absolute top-2 right-2 px-2 py-1 bg-white text-xs font-semibold rounded-sm">
                     P{price}
                 </p>

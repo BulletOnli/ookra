@@ -14,13 +14,13 @@ import { BsCamera } from "react-icons/bs";
 const UserSettingsPage = () => {
     return (
         <div className="w-full h-[70vh] flex items-center justify-center p-4">
-            <div className="w-[40rem] flex flex-col items-center p-4 bg-white rounded-lg">
+            <div className="w-[40rem] flex flex-col items-center p-4 bg-white rounded-lg shadow">
                 <p className="w-full text-lg font-medium">My Profile</p>
                 <p className="w-full text-sm text-gray-700 mb-4">
                     Manage and protect your account
                 </p>
                 <Divider />
-                <div className="w-[80%] flex flex-col items-center p-4">
+                <div className="w-[80%] flex flex-col items-center p-4 ">
                     <FormControl as="form">
                         <VStack mb={8}>
                             <Avatar name="Bullet" size="xl" position="relative">

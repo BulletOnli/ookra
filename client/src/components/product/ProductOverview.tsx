@@ -7,29 +7,21 @@ import {
     VStack,
     useToast,
 } from "@chakra-ui/react";
-import { BsBookmark, BsCartPlus } from "react-icons/bs";
+import { BsCartPlus } from "react-icons/bs";
 import { FaStoreAlt } from "react-icons/fa";
 import { ProductType } from "./ProductCard";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSingleProduct } from "@/src/api/productsApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToCart } from "@/src/api/cartApi";
 import { useState } from "react";
 import Link from "next/link";
-import useUserStore from "@/src/utils/stores/userStore";
 
-const ProductOverview = ({ productId }: { productId: string }) => {
+const ProductOverview = ({ productData }: { productData: ProductType }) => {
     const toast = useToast();
     const queryClient = useQueryClient();
     const [quantity, setQuantity] = useState(1);
 
-    const productQuery = useQuery({
-        queryKey: ["product"],
-        queryFn: () => getSingleProduct(productId),
-    });
-    const productData: ProductType = productQuery?.data;
-
     const addToCartMutation = useMutation({
-        mutationFn: () => addToCart(productId, quantity),
+        mutationFn: () => addToCart(productData?._id, quantity),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cart"] });
             toast({

@@ -47,8 +47,7 @@ export const getAllProducts = asyncHandler(
 );
 
 export const addProduct = asyncHandler(async (req: Request, res: Response) => {
-    const { productName, description, category, price, stocks, sold } =
-        req.body;
+    const { productName, description, category, price, stocks } = req.body;
 
     const img = await uploadImg(
         req.file as { path: string; originalname: string }
@@ -65,7 +64,6 @@ export const addProduct = asyncHandler(async (req: Request, res: Response) => {
         category,
         price,
         stocks,
-        sold,
         productImg,
         seller: req.user._id,
     });
