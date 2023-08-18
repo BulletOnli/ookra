@@ -64,10 +64,11 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
             onClose();
             successDisclosure.onOpen();
         },
-        onError: (err) => {
-            console.log(err);
+        onError: (err: any) => {
+            const errMessage =
+                err.response.data.error.message || "An error occured";
             toast({
-                title: "An error occurred",
+                title: errMessage,
                 status: "error",
                 isClosable: true,
                 duration: 3000,
@@ -147,6 +148,7 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
                                         isDisabled={
                                             cartItemsQuery?.data?.length === 0
                                         }
+                                        variant="ghost"
                                     >
                                         Remove all items
                                     </Button>

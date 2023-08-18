@@ -24,21 +24,25 @@ export const getSingleProduct = async (productId: string) => {
     return response.data;
 };
 
-export type NewProductType = {
-    productName: string;
-    productImg: File;
-    description: string;
-    category: string;
-    price: any;
-    stocks: any;
-};
-
 export const addNewProduct = async (productInfo: FormData) => {
     const response = await axios.post(`${API}/new`, productInfo, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
         },
     });
+
+    return response.data;
+};
+
+export const removeProduct = async (productId: string) => {
+    const response = await axios.delete(
+        `${API}/remove?productId=${productId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+            },
+        }
+    );
 
     return response.data;
 };

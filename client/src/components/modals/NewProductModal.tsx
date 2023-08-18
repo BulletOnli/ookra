@@ -1,5 +1,5 @@
 "use client";
-import { NewProductType, addNewProduct } from "@/src/api/productsApi";
+import { addNewProduct } from "@/src/api/productsApi";
 import useUserStore from "@/src/utils/stores/userStore";
 import {
     Avatar,
@@ -11,16 +11,11 @@ import {
     ModalBody,
     ModalCloseButton,
     useToast,
-    Flex,
-    FormControl,
     Image,
     HStack,
     VStack,
     Button,
     Input,
-    InputGroup,
-    InputLeftElement,
-    Spacer,
     Textarea,
     Select,
     NumberInput,
@@ -33,10 +28,20 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import { ProductType } from "../product/ProductCard";
 
 type NewProductModalProps = {
     isOpen: boolean;
     onClose: () => void;
+};
+
+export type NewProductType = {
+    productName: string;
+    productImg: File;
+    description: string;
+    category: string;
+    price: any;
+    stocks: any;
 };
 
 const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
@@ -46,6 +51,12 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
     const { register, handleSubmit, setValue } = useForm<NewProductType>();
 
     const accountDetails = useUserStore((state) => state.accountDetails);
+    const products: ProductType[] | undefined = queryClient.getQueryData([
+        "products",
+    ]);
+    const categories = [
+        ...new Set(products?.map((product: ProductType) => product.category)),
+    ];
 
     // upload img and display in the ui
     const handleImgUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -78,14 +89,16 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
             onClose();
             setPreviewImage("");
         },
-        onError: (error) => {
-            console.log(error);
+        onError: (err: any) => {
+            const errMessage =
+                err.response.data.error.message || "An error occured";
             toast({
-                title: "Oops! Something went wrong.",
+                title: errMessage,
                 status: "error",
                 isClosable: true,
+                duration: 3000,
                 position: "top",
-                duration: 2000,
+                variant: "top-accent",
             });
         },
     });
@@ -133,7 +146,7 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                         htmlFor="productImg-upload"
                                         className="w-full"
                                     >
-                                        Upload Product
+                                        Upload Product image
                                     </label>
                                     <input
                                         onChange={handleImgUpload}
@@ -141,7 +154,7 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                         accept="image/*"
                                         id="productImg-upload"
                                         className="hidden"
-                                        // required
+                                        required
                                     />
                                 </Button>
                             </VStack>
@@ -211,16 +224,25 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                     </VStack>
                                 </HStack>
 
-                                <FormLabel w="full">Product name:</FormLabel>
+                                <FormLabel w="full">Category:</FormLabel>
                                 <Select
-                                    placeholder="Category"
+                                    placeholder="- Product Category -"
                                     required
                                     mb={2}
                                     {...register("category", {
                                         required: true,
                                     })}
                                 >
-                                    <option value="option1">option 1</option>
+                                    {categories?.map(
+                                        (category: string, index) => (
+                                            <option
+                                                value={category}
+                                                key={index}
+                                            >
+                                                {category}
+                                            </option>
+                                        )
+                                    )}
                                 </Select>
                             </VStack>
                         </div>
@@ -228,10 +250,10 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
 
                     <ModalFooter>
                         <Button
-                            // isDisabled={!previewImage}
+                            isDisabled={!previewImage}
                             type="submit"
                             colorScheme="blue"
-                            isLoading={false}
+                            isLoading={newProductMutation?.isLoading}
                             spinnerPlacement="start"
                         >
                             Create

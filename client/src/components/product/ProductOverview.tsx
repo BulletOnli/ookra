@@ -33,10 +33,11 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                 variant: "left-accent",
             });
         },
-        onError: (err) => {
-            console.log(err);
+        onError: (err: any) => {
+            const errMessage =
+                err.response.data.error.message || "An error occured";
             toast({
-                title: "An error occurred",
+                title: errMessage,
                 status: "error",
                 isClosable: true,
                 duration: 3000,
@@ -52,13 +53,15 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                 src={productData?.productImg?.url}
                 fallbackSrc="https://via.placeholder.com/500"
                 objectFit="cover"
-                boxSize="30rem"
+                aspectRatio="4/3"
+                width="70rem"
+                height="30rem"
                 rounded="xl"
                 boxShadow="sm"
                 loading="lazy"
             />
             <div className="w-full flex flex-col items-center gap-2">
-                <div className="w-full h-[80%] flex flex-col items-center justify-around gap-4 p-6 bg-white  shadow-sm rounded-xl">
+                <div className="w-full h-full flex flex-col items-center justify-around gap-4 p-6 bg-white  shadow-sm rounded-xl">
                     <HStack w="full">
                         <h1 className="text-2xl font-bold ">
                             {productData?.productName}
@@ -96,7 +99,8 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                             borderColor="black"
                             leftIcon={<BsCartPlus size={20} />}
                             onClick={() => addToCartMutation.mutate()}
-                            isDisabled={addToCartMutation.isLoading}
+                            isLoading={addToCartMutation.isLoading}
+                            isDisabled={productData?.stocks == 0}
                         >
                             Add to cart
                         </Button>
@@ -138,7 +142,7 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                         </Button>
                     </HStack>
                 </div>
-                <div className="w-full h-[20%] flex items-center px-4 bg-white shadow-sm rounded-lg">
+                <div className="w-full flex items-center p-4 bg-white shadow-sm rounded-lg">
                     <HStack>
                         <Avatar name={productData?.seller?.username} />
                         <VStack spacing={0}>

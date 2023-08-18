@@ -1,4 +1,5 @@
-import { clearCart } from "@/src/api/cartApi";
+import { removeProduct } from "@/src/api/productsApi";
+import useUserStore from "@/src/utils/stores/userStore";
 import {
     AlertDialog,
     AlertDialogBody,
@@ -17,22 +18,28 @@ type ClearCartAlertProps = {
         isOpen: boolean;
         onClose: () => void;
     };
+    productId: string;
 };
 
-const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
+const RemoveProductAlert = ({
+    warningDisclosure,
+    productId,
+}: ClearCartAlertProps) => {
     const toast = useToast();
     const cancelRef = useRef(null);
     const queryClient = useQueryClient();
+    const accountDetails = useUserStore((state) => state.accountDetails);
 
-    const clearCartMutation = useMutation({
-        mutationFn: clearCart,
+    const removeProductMutation = useMutation({
+        mutationFn: removeProduct,
         onSuccess: () => {
-            queryClient.invalidateQueries(["cart"]);
-
+            queryClient.invalidateQueries({
+                queryKey: ["products", accountDetails?._id],
+            });
             warningDisclosure.onClose();
 
             toast({
-                title: "Clear cart success",
+                title: "Product removed!",
                 status: "success",
                 isClosable: true,
                 duration: 2000,
@@ -63,7 +70,7 @@ const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        Remove all items
+                        Remove product
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
@@ -79,8 +86,10 @@ const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
                         </Button>
                         <Button
                             colorScheme="red"
-                            isLoading={clearCartMutation.isLoading}
-                            onClick={() => clearCartMutation.mutate()}
+                            isLoading={removeProductMutation.isLoading}
+                            onClick={() =>
+                                removeProductMutation.mutate(productId)
+                            }
                             ml={3}
                         >
                             Delete
@@ -92,4 +101,4 @@ const ClearCartAlert = ({ warningDisclosure }: ClearCartAlertProps) => {
     );
 };
 
-export default ClearCartAlert;
+export default RemoveProductAlert;

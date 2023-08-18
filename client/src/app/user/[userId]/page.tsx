@@ -1,7 +1,7 @@
 "use client";
 import { getSellerProducts } from "@/src/api/productsApi";
 import { fetchUserDetails } from "@/src/api/userApi";
-import NewProductModal from "@/src/components/modal/NewProductModal";
+import NewProductModal from "@/src/components/modals/NewProductModal";
 import ProfileTabs from "@/src/components/user-profile/ProfileTabs";
 import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 import useUserStore, { UserType } from "@/src/utils/stores/userStore";
@@ -48,7 +48,7 @@ const UserProfilePage = () => {
 
     return (
         <>
-            <div className="w-[80vw] 2xl:w-[60vw] min-h-screen flex flex-col items-center p-4">
+            <div className="w-[85vw] 2xl:w-[65vw] min-h-screen flex flex-col items-center p-4">
                 <div className="w-full flex items-center p-4 mt-4">
                     <HStack spacing={4}>
                         <Avatar name={userDetails?.firstName} size="xl" />
@@ -81,7 +81,7 @@ const UserProfilePage = () => {
                                 rounded="full"
                                 onClick={addProductModalDisclosure?.onOpen}
                             >
-                                Add Products
+                                Add product
                             </Button>
                         </HStack>
                     ) : (

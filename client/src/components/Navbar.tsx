@@ -21,8 +21,8 @@ import { useEffect } from "react";
 import useUserStore from "@/src/utils/stores/userStore";
 import { useRouter } from "next/navigation";
 import { isTokenAvailable } from "../utils/checkAccessToken";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logoutUser } from "../api/authApi";
+import { useQueryClient } from "@tanstack/react-query";
+import { CartItemType } from "./cart/CartItem";
 
 const Cart = dynamic(() => import("./cart/Cart"));
 
@@ -31,6 +31,12 @@ const Navbar = () => {
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { accountDetails, getAccountDetails, logoutUser } = useUserStore();
+
+    const queryClient = useQueryClient();
+
+    const itemsInCart: CartItemType[] | undefined = queryClient.getQueryData([
+        "cart",
+    ]);
 
     const handleLogout = () => {
         logoutUser();
@@ -80,16 +86,21 @@ const Navbar = () => {
                             rounded="full"
                         />
                     </InputGroup>
-                    <BsCart2
-                        className="text-3xl cursor-pointer"
-                        onClick={() => {
-                            if (!accountDetails) {
-                                router.push("/login");
-                            } else {
-                                onOpen();
-                            }
-                        }}
-                    />
+                    <div className=" relative">
+                        <div className="absolute -right-1 -top-1 px-[6px] py-[2px] text-[10px] font-bold bg-blue-500 text-white rounded-full">
+                            {itemsInCart?.length}
+                        </div>
+                        <BsCart2
+                            className="text-3xl cursor-pointer"
+                            onClick={() => {
+                                if (!accountDetails) {
+                                    router.push("/login");
+                                } else {
+                                    onOpen();
+                                }
+                            }}
+                        />
+                    </div>
 
                     {!accountDetails ? (
                         <Button colorScheme="blue" as={Link} href="/login">

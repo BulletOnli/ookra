@@ -13,6 +13,14 @@ const Homepage = () => {
         queryFn: getAllProducts,
     });
 
+    const categories = [
+        ...new Set(
+            productQuery?.data?.map((product: ProductType) => product.category)
+        ),
+    ];
+
+    console.log(categories);
+
     useEffect(() => {
         const checkToken = async () => await isTokenAvailable();
         checkToken();
@@ -41,11 +49,11 @@ const Homepage = () => {
             </div>
 
             <div className="w-full flex flex-col gap-4 mt-8">
-                <p className="w-full text-2xl font-bold">Trending Products</p>
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 justify-items-center gap-2 lg:gap-6">
+                <p className="w-full text-xl font-bold">Trending Products</p>
+                <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-items-center gap-2 lg:gap-6">
                     {productQuery.isLoading && <h1>Loading product</h1>}
                     {productQuery?.data
-                        ?.slice(0, 10)
+                        ?.slice(0, 12)
                         .map((product: ProductType) => (
                             <ProductCard
                                 productData={product}
@@ -56,8 +64,8 @@ const Homepage = () => {
             </div>
 
             <div className="w-full flex flex-col gap-4 mt-10">
-                <p className="w-full text-2xl font-bold">Items For You!</p>
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 justify-items-center gap-2 lg:gap-6">
+                <p className="w-full text-xl font-bold">Items For You!</p>
+                <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  justify-items-center gap-2 lg:gap-6">
                     {productQuery?.data?.map((product: ProductType) => (
                         <ProductCard productData={product} key={product._id} />
                     ))}

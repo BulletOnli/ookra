@@ -31,7 +31,7 @@ export const newAccessToken = asyncHandler(
                 }
             );
         } else {
-            res.status(406);
+            res.status(401);
             throw new Error("Unauthorized, No Refresh token");
         }
     }

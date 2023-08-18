@@ -36,7 +36,7 @@ const ProductPage = () => {
     }, []);
 
     return (
-        <div className="w-[80vw] 2xl:w-[60vw] flex flex-col items-center p-6 mb-6">
+        <div className="w-[85vw] 2xl:w-[65vw] flex flex-col items-center p-6 mb-6">
             <p className="w-full text-lg font-semibold text-gray-800 mb-4">
                 <Link href="/">All Items</Link>
                 {" - "}
@@ -47,7 +47,8 @@ const ProductPage = () => {
 
             <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-2 lg:gap-8">
+                {/* className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  justify-items-center gap-2 lg:gap-6" */}
+                <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 justify-items-center gap-2 lg:gap-8">
                     {sellerProductsQuery?.isLoading && (
                         <h1>Loading porducssdfsdf</h1>
                     )}

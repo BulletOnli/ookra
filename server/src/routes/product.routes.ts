@@ -3,6 +3,7 @@ import {
     addProduct,
     getAllProducts,
     getSingleProduct,
+    removeProduct,
     updateProduct,
 } from "../controllers/product.controller";
 import multer from "multer";
@@ -24,5 +25,6 @@ router.get("/", protectRoute, getSingleProduct);
 router.get("/all", getAllProducts);
 router.post("/new", protectRoute, upload.single("productImg"), addProduct);
 router.put("/update", protectRoute, upload.single("productImg"), updateProduct);
+router.delete("/remove", protectRoute, removeProduct);
 
 export default router;
