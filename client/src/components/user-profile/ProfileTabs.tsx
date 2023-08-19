@@ -30,46 +30,48 @@ const ProfileTabs = ({ productsData }: ProfileTabsProps) => {
             </TabList>
             <TabPanels>
                 <TabPanel p={0}>
-                    <>
-                        <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  justify-items-center gap-2 lg:gap-6">
-                            {productsData
-                                ?.slice(0, 10)
-                                .map((product: ProductType) => (
-                                    <div className="relative" key={product._id}>
-                                        {params.userId ===
-                                        accountDetails?._id ? (
-                                            <div className=" absolute z-30 -top-2 -left-2 flex items-center gap-2">
-                                                <IconButton
-                                                    colorScheme="blue"
-                                                    aria-label="Search database"
-                                                    icon={<BsPencil />}
-                                                    size="xs"
-                                                    rounded="full"
-                                                />
-                                                <IconButton
-                                                    colorScheme="red"
-                                                    aria-label="Search database"
-                                                    icon={<BsTrash />}
-                                                    size="xs"
-                                                    rounded="full"
-                                                    onClick={() => {
-                                                        RemoveProductAlertDisclosure.onOpen();
-                                                    }}
-                                                />
-                                            </div>
-                                        ) : (
-                                            ""
-                                        )}
-                                        <ProductCard
-                                            productData={product}
-                                            RemoveProductAlertDisclosure={
-                                                RemoveProductAlertDisclosure
-                                            }
-                                        />
-                                    </div>
-                                ))}
+                    {productsData?.length == 0 ? (
+                        <h1 className="w-full text-center text-xl font-medium ">
+                            Seller doesnt have any products
+                        </h1>
+                    ) : (
+                        <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-items-center gap-2 lg:gap-6">
+                            {productsData?.map((product: ProductType) => (
+                                <div className="relative" key={product._id}>
+                                    {params.userId === accountDetails?._id &&
+                                    accountDetails?.role === "Seller" ? (
+                                        <div className=" absolute z-30 -top-2 -left-2 flex items-center gap-2">
+                                            <IconButton
+                                                colorScheme="blue"
+                                                aria-label="Search database"
+                                                icon={<BsPencil />}
+                                                size="xs"
+                                                rounded="full"
+                                            />
+                                            <IconButton
+                                                colorScheme="red"
+                                                aria-label="Search database"
+                                                icon={<BsTrash />}
+                                                size="xs"
+                                                rounded="full"
+                                                onClick={() => {
+                                                    RemoveProductAlertDisclosure.onOpen();
+                                                }}
+                                            />
+                                        </div>
+                                    ) : (
+                                        ""
+                                    )}
+                                    <ProductCard
+                                        productData={product}
+                                        RemoveProductAlertDisclosure={
+                                            RemoveProductAlertDisclosure
+                                        }
+                                    />
+                                </div>
+                            ))}
                         </div>
-                    </>
+                    )}
                 </TabPanel>
                 <TabPanel>
                     <p>two!</p>

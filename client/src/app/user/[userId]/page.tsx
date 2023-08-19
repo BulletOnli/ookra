@@ -25,16 +25,17 @@ const UserProfilePage = () => {
     const accountDetails = useUserStore((state) => state.accountDetails);
     const addProductModalDisclosure = useDisclosure();
 
-    const productsQuery = useQuery({
-        queryKey: ["products", paramsId],
-        queryFn: () => getSellerProducts(paramsId),
-    });
-
     const userDetailsQuery = useQuery({
         queryKey: ["user", paramsId],
         queryFn: () => fetchUserDetails(paramsId),
     });
     const userDetails: UserType = userDetailsQuery?.data;
+
+    const productsQuery = useQuery({
+        queryKey: ["products", paramsId],
+        queryFn: () => getSellerProducts(paramsId),
+        enabled: userDetailsQuery?.data != undefined,
+    });
 
     useEffect(() => {
         const checkToken = async () => {
@@ -63,7 +64,8 @@ const UserProfilePage = () => {
                     </HStack>
                     <Spacer />
 
-                    {accountDetails?._id === paramsId ? (
+                    {accountDetails?._id === paramsId &&
+                    accountDetails?.role === "Seller" ? (
                         <HStack spacing={4}>
                             <Button
                                 as={Link}

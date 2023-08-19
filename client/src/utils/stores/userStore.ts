@@ -11,6 +11,7 @@ export type UserType = {
     totalSales?: number;
     location?: string;
     _id: string;
+    role: string;
 };
 
 type UserState = {

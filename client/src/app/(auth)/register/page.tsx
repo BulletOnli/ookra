@@ -1,6 +1,15 @@
 "use client";
 import { registerUser } from "@/src/api/authApi";
-import { Button, HStack, Image, Input, useToast } from "@chakra-ui/react";
+import {
+    Button,
+    HStack,
+    Image,
+    Input,
+    Radio,
+    RadioGroup,
+    Stack,
+    useToast,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, ChangeEvent, FormEvent } from "react";
@@ -16,6 +25,8 @@ const Registerpage = () => {
         confirmPassword: "",
         location: "",
     });
+    const [role, setRole] = useState("");
+
     const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +41,8 @@ const Registerpage = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            await registerUser(registerDetails);
+            await registerUser({ ...registerDetails, role });
+
             setRegisterDetails({
                 firstName: "",
                 lastName: "",
@@ -39,6 +51,7 @@ const Registerpage = () => {
                 confirmPassword: "",
                 location: "",
             });
+            setRole("");
             toast({
                 title: "Registration Complete",
                 status: "success",
@@ -74,7 +87,7 @@ const Registerpage = () => {
                             Ookra
                         </h1>
                     </Link>
-                    <Link href="#" className="text-sm text-red-500">
+                    <Link href="/" className="text-sm text-red-500">
                         Need help?
                     </Link>
                 </div>
@@ -129,6 +142,22 @@ const Registerpage = () => {
                             onChange={handleInputChange}
                             required
                         />
+                        <RadioGroup
+                            w="full"
+                            mt={4}
+                            onChange={setRole}
+                            value={role}
+                            className="flex justify-center items-center "
+                        >
+                            <Stack direction="row" gap={4}>
+                                <Radio value="Buyer" isRequired>
+                                    Buyer
+                                </Radio>
+                                <Radio value="Seller" isRequired>
+                                    Seller
+                                </Radio>
+                            </Stack>
+                        </RadioGroup>
                         <Button
                             w="full"
                             mt={4}

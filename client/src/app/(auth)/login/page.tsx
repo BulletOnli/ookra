@@ -51,7 +51,7 @@ const LoginPage = () => {
                             Ookra
                         </h1>
                     </Link>
-                    <Link href="#" className="text-sm text-red-500">
+                    <Link href="/" className="text-sm text-red-500">
                         Need help?
                     </Link>
                 </div>

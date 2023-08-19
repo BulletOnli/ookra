@@ -40,7 +40,7 @@ const ProductPage = () => {
             <p className="w-full text-lg font-semibold text-gray-800 mb-4">
                 <Link href="/">All Items</Link>
                 {" - "}
-                <Link href="#">Category</Link> {" - "}
+                <Link href="/">Category</Link> {" - "}
                 {productId}
             </p>
             <ProductOverview productData={singleProductQuery?.data} />
@@ -52,14 +52,9 @@ const ProductPage = () => {
                     {sellerProductsQuery?.isLoading && (
                         <h1>Loading porducssdfsdf</h1>
                     )}
-                    {sellerProductsQuery?.data
-                        ?.slice(0, 10)
-                        .map((product: ProductType) => (
-                            <ProductCard
-                                productData={product}
-                                key={product._id}
-                            />
-                        ))}
+                    {sellerProductsQuery?.data?.map((product: ProductType) => (
+                        <ProductCard productData={product} key={product._id} />
+                    ))}
                 </div>
             </div>
         </div>

@@ -6,20 +6,13 @@ import { Image } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { isTokenAvailable } from "../utils/checkAccessToken";
+import Categories from "../components/Categories";
 
 const Homepage = () => {
     const productQuery = useQuery({
         queryKey: ["products"],
         queryFn: getAllProducts,
     });
-
-    const categories = [
-        ...new Set(
-            productQuery?.data?.map((product: ProductType) => product.category)
-        ),
-    ];
-
-    console.log(categories);
 
     useEffect(() => {
         const checkToken = async () => await isTokenAvailable();
@@ -37,7 +30,7 @@ const Homepage = () => {
                         loading="lazy"
                         alt="Banner"
                         src="/sidebanner1.png"
-                        className="w-full h-[7rem] object-cover "
+                        className="w-full h-[8rem] object-cover "
                     />
                     <Image
                         loading="lazy"
@@ -47,6 +40,8 @@ const Homepage = () => {
                     />
                 </div>
             </div>
+
+            <Categories productsData={productQuery?.data} />
 
             <div className="w-full flex flex-col gap-4 mt-8">
                 <p className="w-full text-xl font-bold">Trending Products</p>

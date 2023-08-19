@@ -7,7 +7,8 @@ import {
     updateProduct,
 } from "../controllers/product.controller";
 import multer from "multer";
-import protectRoute from "../middleware/protectRoute";
+import protectRoute from "../middleware/auth/protectRoute";
+import roleChecker from "../middleware/auth/roleChecker";
 
 const router = express.Router();
 
@@ -21,10 +22,27 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.get("/", protectRoute, getSingleProduct);
+router.get(
+    "/",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    getSingleProduct
+);
 router.get("/all", getAllProducts);
-router.post("/new", protectRoute, upload.single("productImg"), addProduct);
-router.put("/update", protectRoute, upload.single("productImg"), updateProduct);
-router.delete("/remove", protectRoute, removeProduct);
+router.post(
+    "/new",
+    protectRoute,
+    roleChecker(["Seller"]),
+    upload.single("productImg"),
+    addProduct
+);
+router.put(
+    "/update",
+    protectRoute,
+    roleChecker(["Seller"]),
+    upload.single("productImg"),
+    updateProduct
+);
+router.delete("/remove", protectRoute, roleChecker(["Seller"]), removeProduct);
 
 export default router;

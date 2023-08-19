@@ -1,8 +1,8 @@
-import * as globalTypes from "../types/global";
+import * as globalTypes from "../../types/global";
 import asyncHandler from "express-async-handler";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/userModel";
+import User from "../../models/userModel";
 
 const protectRoute = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {

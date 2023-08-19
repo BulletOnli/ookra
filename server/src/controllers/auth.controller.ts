@@ -76,6 +76,7 @@ export const registerUser = asyncHandler(
             confirmPassword,
             username,
             location,
+            role,
         } = req.body;
         const user = await User.findOne({ username });
 
@@ -101,9 +102,18 @@ export const registerUser = asyncHandler(
             password: hashedPassword,
             username,
             location,
+            role,
         });
 
+        const refreshToken = generateRefreshToken(newUser._id.toString());
+
         if (newUser) {
+            res.cookie("jwt", refreshToken, {
+                httpOnly: true,
+                sameSite: "none",
+                secure: true,
+                maxAge: 1000 * 60 * 60 * 24,
+            });
             res.status(201).json({
                 userId: newUser._id,
                 token: generateAccessToken(newUser._id.toString()),

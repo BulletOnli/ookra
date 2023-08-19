@@ -7,14 +7,19 @@ type RegisterDetailsType = {
     lastName: string;
     username: string;
     password: string;
+    role: string;
 };
 
 export const registerUser = async (data: RegisterDetailsType) => {
-    const response = await axios.post(`${API}/register`, data);
+    const response = await axios.post(`${API}/register`, data, {
+        withCredentials: true,
+    });
 
     if (response.data.token) {
         localStorage.setItem("ookraToken", response.data.token);
     }
+
+    return response.data;
 };
 
 export const loginUser = async (data: {

@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    role: {
+        type: String,
+        required: true,
+    },
 });
 
 export type UserType = mongoose.InferSchemaType<typeof userSchema>;

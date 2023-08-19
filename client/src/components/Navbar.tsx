@@ -70,9 +70,9 @@ const Navbar = () => {
                 </Link>
 
                 <HStack spacing={10} fontWeight="semibold">
-                    <Link href="#">Categories</Link>
-                    <Link href="#">New Arrival</Link>
-                    <Link href="#">Brands</Link>
+                    <Link href="/">Categories</Link>
+                    <Link href="/">New Arrival</Link>
+                    <Link href="/">Brands</Link>
                 </HStack>
 
                 <HStack spacing={5}>
@@ -86,21 +86,25 @@ const Navbar = () => {
                             rounded="full"
                         />
                     </InputGroup>
-                    <div className=" relative">
-                        <div className="absolute -right-1 -top-1 px-[6px] py-[2px] text-[10px] font-bold bg-blue-500 text-white rounded-full">
-                            {itemsInCart?.length}
+                    {accountDetails?.role === "Buyer" ? (
+                        <div className=" relative">
+                            <div className="absolute -right-1 -top-1 px-[6px] py-[2px] text-[10px] font-bold bg-blue-500 text-white rounded-full">
+                                {itemsInCart?.length}
+                            </div>
+                            <BsCart2
+                                className="text-3xl cursor-pointer"
+                                onClick={() => {
+                                    if (!accountDetails) {
+                                        router.push("/login");
+                                    } else {
+                                        onOpen();
+                                    }
+                                }}
+                            />
                         </div>
-                        <BsCart2
-                            className="text-3xl cursor-pointer"
-                            onClick={() => {
-                                if (!accountDetails) {
-                                    router.push("/login");
-                                } else {
-                                    onOpen();
-                                }
-                            }}
-                        />
-                    </div>
+                    ) : (
+                        ""
+                    )}
 
                     {!accountDetails ? (
                         <Button colorScheme="blue" as={Link} href="/login">
@@ -115,20 +119,24 @@ const Navbar = () => {
                                 />
                             </MenuButton>
                             <MenuList>
-                                <MenuItem
-                                    icon={<FaUserCircle size={17} />}
-                                    as={Link}
-                                    href={`/user/${accountDetails?._id}`}
-                                    className="hover:bg-gray-100"
-                                >
-                                    My Account
-                                </MenuItem>
-                                <MenuItem
-                                    icon={<BsCreditCard size={17} />}
-                                    className="hover:bg-gray-100"
-                                >
-                                    My Purchase
-                                </MenuItem>
+                                {accountDetails?.role === "Seller" ? (
+                                    <MenuItem
+                                        icon={<FaUserCircle size={17} />}
+                                        as={Link}
+                                        href={`/user/${accountDetails?._id}`}
+                                        className="hover:bg-gray-100"
+                                    >
+                                        Seller Profile
+                                    </MenuItem>
+                                ) : (
+                                    <MenuItem
+                                        icon={<BsCreditCard size={17} />}
+                                        className="hover:bg-gray-100"
+                                    >
+                                        My Purchase
+                                    </MenuItem>
+                                )}
+
                                 <MenuItem
                                     as={Link}
                                     icon={<BsGear size={17} />}

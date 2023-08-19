@@ -3,11 +3,17 @@ import {
     getAccountDetails,
     getUserDetails,
 } from "../controllers/user.controller";
-import protectRoute from "../middleware/protectRoute";
+import protectRoute from "../middleware/auth/protectRoute";
+import roleChecker from "../middleware/auth/roleChecker";
 
 const router = express.Router();
 
-router.get("/account/details", protectRoute, getAccountDetails);
-router.get("/details", getUserDetails);
+router.get(
+    "/account/details",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    getAccountDetails
+);
+router.get("/details", protectRoute, getUserDetails);
 
 export default router;
