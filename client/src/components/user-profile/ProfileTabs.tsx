@@ -10,7 +10,7 @@ import {
 import ProductCard, { ProductType } from "../product/ProductCard";
 import { BsPencil, BsTrash } from "react-icons/bs";
 import { useParams } from "next/navigation";
-import useUserStore from "@/src/utils/stores/userStore";
+import useUserStore from "@/src/stores/userStore";
 
 type ProfileTabsProps = {
     productsData: ProductType[];

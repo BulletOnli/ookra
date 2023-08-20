@@ -82,7 +82,7 @@ const CartItem = ({ item, onClose }: CartItemProps) => {
                 size="sm"
                 icon={<FaTrash />}
                 onClick={() => removeCartItem.mutate()}
-                isDisabled={removeCartItem.isLoading}
+                isLoading={removeCartItem.isLoading}
             />
         </div>
     );

@@ -24,6 +24,8 @@ const Categories = ({ productsData }: { productsData: ProductType[] }) => {
         ),
     ];
 
+    if (categories.length == 0) return;
+
     return (
         <div className="w-full flex flex-col bg-white rounded-md mt-6 ">
             <p className="p-4 font-medium text-gray-600 border-b">CATEGORIES</p>

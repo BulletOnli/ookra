@@ -13,6 +13,45 @@ export const fetchAccountDetails = async () => {
     return response.data;
 };
 
+export type updateAccountDetailsType = {
+    firstName: string;
+    lastName: string;
+    username: string;
+};
+
+export const updateAccountDetails = async (
+    details: updateAccountDetailsType
+) => {
+    const response = await axios.post(
+        `${API}/account/details/update`,
+        details,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+            },
+        }
+    );
+
+    return response.data;
+};
+
+export const changeAccountPassword = async (details: {
+    oldPassword: string;
+    newPassword: string;
+}) => {
+    const response = await axios.post(
+        `${API}/account/password/update`,
+        details,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+            },
+        }
+    );
+
+    return response.data;
+};
+
 // fetch the details of the specific user
 export const fetchUserDetails = async (userId: string) => {
     const response = await axios.get(`${API}/details?userId=${userId}`, {

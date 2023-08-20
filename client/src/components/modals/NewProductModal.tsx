@@ -1,6 +1,6 @@
 "use client";
 import { addNewProduct } from "@/src/api/productsApi";
-import useUserStore from "@/src/utils/stores/userStore";
+import useUserStore from "@/src/stores/userStore";
 import {
     Avatar,
     Modal,
@@ -193,6 +193,7 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                                 {...register("stocks", {
                                                     required: true,
                                                     min: 1,
+                                                    max: 99,
                                                 })}
                                             />
                                             <NumberInputStepper>
@@ -214,6 +215,7 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                                 {...register("price", {
                                                     required: true,
                                                     min: 1,
+                                                    max: 99,
                                                 })}
                                             />
                                             <NumberInputStepper>

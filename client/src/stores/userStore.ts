@@ -1,6 +1,6 @@
 import { fetchAccountDetails } from "@/src/api/userApi";
 import { create } from "zustand";
-import { isTokenAvailable } from "../checkAccessToken";
+import { isTokenAvailable } from "../utils/checkAccessToken";
 import { logoutUser } from "@/src/api/authApi";
 
 export type UserType = {

@@ -18,7 +18,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import useUserStore from "@/src/utils/stores/userStore";
+import useUserStore from "@/src/stores/userStore";
 import { useRouter } from "next/navigation";
 import { isTokenAvailable } from "../utils/checkAccessToken";
 import { useQueryClient } from "@tanstack/react-query";

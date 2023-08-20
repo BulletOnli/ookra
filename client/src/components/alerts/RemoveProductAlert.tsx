@@ -1,5 +1,5 @@
 import { removeProduct } from "@/src/api/productsApi";
-import useUserStore from "@/src/utils/stores/userStore";
+import useUserStore from "@/src/stores/userStore";
 import {
     AlertDialog,
     AlertDialogBody,

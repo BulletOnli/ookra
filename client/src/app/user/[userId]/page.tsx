@@ -4,7 +4,7 @@ import { fetchUserDetails } from "@/src/api/userApi";
 import NewProductModal from "@/src/components/modals/NewProductModal";
 import ProfileTabs from "@/src/components/user-profile/ProfileTabs";
 import { isTokenAvailable } from "@/src/utils/checkAccessToken";
-import useUserStore, { UserType } from "@/src/utils/stores/userStore";
+import useUserStore, { UserType } from "@/src/stores/userStore";
 import {
     Avatar,
     Button,

@@ -16,8 +16,7 @@ import {
 import CartItem, { CartItemType } from "./CartItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cartCheckout, getCartItems, removeToCart } from "@/src/api/cartApi";
-import { UserType } from "@/src/utils/stores/userStore";
-import CartItemSkeleton from "./CartItemSkeleton";
+import { UserType } from "@/src/stores/userStore";
 import SuccessOrder from "../alerts/SuccessOrder";
 import ClearCartAlert from "../alerts/ClearCartAlert";
 import { useEffect } from "react";
@@ -97,9 +96,6 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
                     <DrawerBody>
                         <div className="w-full h-full flex flex-col">
                             <div className="w-full h-full flex flex-col gap-4 overflow-y-auto">
-                                {cartItemsQuery?.isLoading && (
-                                    <CartItemSkeleton />
-                                )}
                                 {cartItemsQuery?.data?.map(
                                     (item: CartItemType) => (
                                         <CartItem
