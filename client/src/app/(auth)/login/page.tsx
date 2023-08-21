@@ -59,7 +59,12 @@ const LoginPage = () => {
 
             <div className="w-[60rem] h-[30rem] flex justify-center rounded-xl bg-white shadow-custom p-6">
                 <div className="w-[50%] h-full flex justify-center items-center">
-                    <Image src="/illu.svg" w="25rem" loading="lazy" />
+                    <Image
+                        alt="illustration"
+                        src="/illu.svg"
+                        w="25rem"
+                        loading="lazy"
+                    />
                 </div>
 
                 <div className="w-[50%] h-full flex flex-col items-center justify-center p-6">

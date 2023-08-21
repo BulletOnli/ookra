@@ -140,6 +140,7 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                     src={previewImage}
                                     fallbackSrc="https://via.placeholder.com/400"
                                     alt="Product preview"
+                                    loading="lazy"
                                 />
                                 <Button size="sm" w="full" colorScheme="blue">
                                     <label

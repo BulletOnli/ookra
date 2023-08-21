@@ -59,6 +59,7 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                 rounded="xl"
                 boxShadow="sm"
                 loading="lazy"
+                alt="Product img"
             />
             <div className="w-full flex flex-col items-center gap-2">
                 <div className="w-full h-full flex flex-col items-center justify-around gap-4 p-6 bg-white  shadow-sm rounded-xl">

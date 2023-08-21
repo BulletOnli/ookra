@@ -4,8 +4,8 @@ import refreshAccessToken from "../api/refreshToken";
 export const isTokenAvailable = async () => {
     const token = localStorage.getItem("ookraToken");
 
+    // No token
     if (!token) {
-        console.log("no token");
         return false;
     }
 
@@ -14,10 +14,12 @@ export const isTokenAvailable = async () => {
         const expirationTime = decodedToken.exp * 1000;
         const currentTime = Date.now();
 
+        //  If access token is expired and refresh token is not, generate new access token
         if (currentTime > expirationTime) {
             const newAccessToken = await refreshAccessToken();
+
             if (newAccessToken) {
-                console.log("token refresh ");
+                console.log("Token refresh");
                 localStorage.setItem("ookraToken", newAccessToken);
                 return true;
             } else {
@@ -29,8 +31,9 @@ export const isTokenAvailable = async () => {
         return true;
     } catch (error) {
         const newAccessToken = await refreshAccessToken();
+
         if (newAccessToken) {
-            console.log("token refresh");
+            console.log("Token refresh");
             localStorage.setItem("ookraToken", newAccessToken);
             return true;
         } else {

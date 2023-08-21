@@ -1,5 +1,5 @@
 import { Image } from "@chakra-ui/react";
-import { ProductType } from "./product/ProductCard";
+import { ProductType } from "../product/ProductCard";
 import Link from "next/link";
 
 const Category = ({ category }: { category: string }) => {
@@ -10,6 +10,7 @@ const Category = ({ category }: { category: string }) => {
                     alt="category"
                     boxSize="64px"
                     src={`/categories/${category}.png`}
+                    loading="lazy"
                 />
                 <p className="text-sm text-center">{category}</p>
             </div>

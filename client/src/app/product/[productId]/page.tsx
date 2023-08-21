@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { isTokenAvailable } from "@/src/utils/checkAccessToken";
+import Loading from "../../loading";
 
 const ProductPage = () => {
     const router = useRouter();
@@ -34,6 +35,8 @@ const ProductPage = () => {
 
         checkToken();
     }, []);
+
+    if (singleProductQuery?.isFetching) return <Loading />;
 
     return (
         <div className="w-[85vw] 2xl:w-[65vw] flex flex-col items-center p-6 mb-6">

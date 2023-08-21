@@ -35,13 +35,9 @@ type RemoveProductAlertDisclosureType = {
 
 type ProductCardProps = {
     productData: ProductType;
-    RemoveProductAlertDisclosure?: RemoveProductAlertDisclosureType;
 };
 
-const ProductCard = ({
-    productData,
-    RemoveProductAlertDisclosure,
-}: ProductCardProps) => {
+const ProductCard = ({ productData }: ProductCardProps) => {
     const { productName, productImg, _id, price, sold, seller } = productData;
 
     const imageHValues = useBreakpointValue({
@@ -63,6 +59,7 @@ const ProductCard = ({
                         objectFit="cover"
                         fallbackSrc="https://via.placeholder.com/300"
                         loading="lazy"
+                        alt="product"
                     />
                     <div className="w-full h-full flex flex-col p-2">
                         <p className="font-semibold text-xs md:text-sm">
@@ -83,13 +80,6 @@ const ProductCard = ({
                     </div>
                 </div>
             </Link>
-
-            {RemoveProductAlertDisclosure && (
-                <RemoveProductAlert
-                    warningDisclosure={RemoveProductAlertDisclosure}
-                    productId={_id}
-                />
-            )}
         </>
     );
 };

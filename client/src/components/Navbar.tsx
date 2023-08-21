@@ -53,11 +53,11 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        getAccountDetails();
         const checkToken = async () => {
             await isTokenAvailable();
         };
         checkToken();
+        getAccountDetails();
     }, []);
 
     return (
@@ -158,7 +158,7 @@ const Navbar = () => {
                 </HStack>
             </nav>
 
-            {accountDetails && (
+            {accountDetails && accountDetails?.role === "Buyer" && (
                 <Cart
                     isOpen={isOpen}
                     onClose={onClose}

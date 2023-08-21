@@ -11,6 +11,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
 import { useRef } from "react";
 
 type ClearCartAlertProps = {
@@ -25,6 +26,8 @@ const RemoveProductAlert = ({
     warningDisclosure,
     productId,
 }: ClearCartAlertProps) => {
+    const pathname = usePathname();
+    const router = useRouter();
     const toast = useToast();
     const cancelRef = useRef(null);
     const queryClient = useQueryClient();
@@ -61,11 +64,18 @@ const RemoveProductAlert = ({
         },
     });
 
+    const handleCloseAlert = () => {
+        warningDisclosure.onClose();
+
+        // Remove the query
+        router.replace(pathname);
+    };
+
     return (
         <AlertDialog
             isOpen={warningDisclosure.isOpen}
             leastDestructiveRef={cancelRef}
-            onClose={warningDisclosure.onClose}
+            onClose={handleCloseAlert}
         >
             <AlertDialogOverlay>
                 <AlertDialogContent>

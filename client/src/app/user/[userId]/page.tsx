@@ -2,7 +2,6 @@
 import { getSellerProducts } from "@/src/api/productsApi";
 import { fetchUserDetails } from "@/src/api/userApi";
 import NewProductModal from "@/src/components/modals/NewProductModal";
-import ProfileTabs from "@/src/components/user-profile/ProfileTabs";
 import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 import useUserStore, { UserType } from "@/src/stores/userStore";
 import {
@@ -10,6 +9,11 @@ import {
     Button,
     HStack,
     Spacer,
+    Tab,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Tabs,
     useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -18,6 +22,8 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { BsPlus } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
+import Loading from "../../loading";
+import ProductsTab from "@/src/components/profile-tabs/ProductsTab";
 
 const UserProfilePage = () => {
     const router = useRouter();
@@ -46,6 +52,19 @@ const UserProfilePage = () => {
 
         checkToken();
     }, []);
+
+    if (userDetailsQuery.isFetching) return <Loading />;
+
+    if (userDetails?.role === "Buyer")
+        return (
+            <div className="w-full h-screen flex flex-col justify-center items-center">
+                <h1 className="text-[3rem] font-bold">404</h1>
+                <p className="mb-6 text-2xl">Page not found</p>
+                <Button colorScheme="blue" onClick={() => router.back()}>
+                    Go back
+                </Button>
+            </div>
+        );
 
     return (
         <>
@@ -132,7 +151,24 @@ const UserProfilePage = () => {
                     </p>
                 </div>
 
-                <ProfileTabs productsData={productsQuery?.data} />
+                <Tabs isFitted variant="line" w="full">
+                    <TabList mb={6}>
+                        <Tab fontWeight="medium">Products</Tab>
+                        <Tab fontWeight="medium">Others</Tab>
+                        <Tab fontWeight="medium">Others</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel p={0}>
+                            <ProductsTab productsData={productsQuery?.data} />
+                        </TabPanel>
+                        <TabPanel>
+                            <p>two!</p>
+                        </TabPanel>
+                        <TabPanel>
+                            <p>three!</p>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
             </div>
 
             <NewProductModal

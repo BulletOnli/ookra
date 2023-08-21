@@ -1,14 +1,17 @@
 "use client";
 import { getAllProducts } from "@/src/api/productsApi";
 import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
-import ImageSlider from "@/src/components/ImageSlider";
+import ImageSlider from "@/src/components/main-page/ImageSlider";
 import { Image } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { isTokenAvailable } from "../utils/checkAccessToken";
-import Categories from "../components/Categories";
+import Categories from "../components/main-page/Categories";
+import useUserStore from "../stores/userStore";
 
 const Homepage = () => {
+    const getAccountDetails = useUserStore((state) => state.getAccountDetails);
+
     const productQuery = useQuery({
         queryKey: ["products"],
         queryFn: getAllProducts,
@@ -17,6 +20,7 @@ const Homepage = () => {
     useEffect(() => {
         const checkToken = async () => await isTokenAvailable();
         checkToken();
+        getAccountDetails();
     }, []);
 
     return (
