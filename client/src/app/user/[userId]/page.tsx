@@ -22,8 +22,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { BsPlus } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
-import Loading from "../../loading";
-import ProductsTab from "@/src/components/profile-tabs/ProductsTab";
+import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
 
 const UserProfilePage = () => {
     const router = useRouter();
@@ -52,8 +51,6 @@ const UserProfilePage = () => {
 
         checkToken();
     }, []);
-
-    if (userDetailsQuery.isFetching) return <Loading />;
 
     if (userDetails?.role === "Buyer")
         return (
@@ -86,7 +83,7 @@ const UserProfilePage = () => {
                     {accountDetails?._id === paramsId &&
                     accountDetails?.role === "Seller" ? (
                         <HStack spacing={4}>
-                            <Button
+                            {/* <Button
                                 as={Link}
                                 href="/user/settings"
                                 colorScheme="blue"
@@ -95,7 +92,7 @@ const UserProfilePage = () => {
                                 px={8}
                             >
                                 Edit Profile
-                            </Button>
+                            </Button> */}
                             <Button
                                 leftIcon={<BsPlus size={26} />}
                                 colorScheme="blue"
@@ -159,7 +156,13 @@ const UserProfilePage = () => {
                     </TabList>
                     <TabPanels>
                         <TabPanel p={0}>
-                            <ProductsTab productsData={productsQuery?.data} />
+                            <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-items-center gap-2 lg:gap-6">
+                                {productsQuery?.data?.map(
+                                    (product: ProductType) => (
+                                        <ProductCard productData={product} />
+                                    )
+                                )}
+                            </div>
                         </TabPanel>
                         <TabPanel>
                             <p>two!</p>

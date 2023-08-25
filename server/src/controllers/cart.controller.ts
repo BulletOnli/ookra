@@ -157,14 +157,14 @@ export const cartCheckout = asyncHandler(
                     if (purchaseItem) {
                         // adds up to the existing item in purchase history
                         purchaseItem.totalSpent += item.price * item.inCart;
+                        purchaseItem.totalQuantity += item.inCart;
                         await purchaseItem.save();
                     } else {
                         await Purchase.create({
-                            productName: item.productName,
                             _id: item._id,
-                            productImg: item.productImg,
                             totalSpent: item.price * item.inCart,
                             purchaseOwner: item.cartOwner,
+                            totalQuantity: item.inCart,
                         });
                     }
 

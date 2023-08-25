@@ -94,31 +94,46 @@ export const removeProduct = asyncHandler(
 export const updateProduct = asyncHandler(
     async (req: Request, res: Response) => {
         const { productId } = req.query;
+        const { productName, description, category, price, stocks } =
+            req.body as {
+                productName: string;
+                description: string;
+                category: string;
+                price: number;
+                stocks: number;
+            };
 
-        const updatedProduct = await Product.findByIdAndUpdate(
-            productId,
-            req.body
-        );
+        const product = await Product.findById(productId);
 
-        if (!updatedProduct) {
+        if (product) {
+            if (productName) product.productName = productName;
+            if (description) product.description = description;
+            if (category) product.category = category;
+            if (price) product.price = price;
+            if (stocks) product.stocks = stocks;
+
+            if (req.file && product.productImg) {
+                const img = await uploadImg(req.file);
+
+                if (img) {
+                    const newProductImg = {
+                        id: img.asset_id,
+                        url: img.url,
+                    };
+
+                    // delete the previous img
+                    //todo: FIX DELETE THE PREVIOUS IMAGE
+                    // await deleteImg(product.productImg.id);
+                    // save the new img to db
+                    product.productImg = newProductImg;
+                }
+            }
+
+            await product.save();
+            res.status(200).json({ message: "Product updated!" });
+        } else {
             res.status(404);
             throw new Error("Failed to update, product not found");
         }
-
-        if (req.file && updatedProduct.productImg) {
-            const img = await uploadImg(req.file);
-            const newProductImg = {
-                id: img.asset_id,
-                url: img.url,
-            };
-
-            // delete the previous img
-            await deleteImg(updatedProduct.productImg.id);
-            // save the new img to db
-            updatedProduct.productImg = newProductImg;
-            await updatedProduct.save();
-        }
-
-        res.status(200).json({ message: "Product updated!" });
     }
 );

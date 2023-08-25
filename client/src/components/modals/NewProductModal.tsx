@@ -26,9 +26,10 @@ import {
     FormLabel,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ProductType } from "../product/ProductCard";
+import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 
 type NewProductModalProps = {
     isOpen: boolean;
@@ -83,7 +84,8 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                 title: "New product uploaded!",
                 status: "success",
                 isClosable: true,
-                position: "bottom-left",
+                position: "top-left",
+                variant: "left-accent",
                 duration: 3000,
             });
             onClose();
@@ -140,7 +142,6 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                     src={previewImage}
                                     fallbackSrc="https://via.placeholder.com/400"
                                     alt="Product preview"
-                                    loading="lazy"
                                 />
                                 <Button size="sm" w="full" colorScheme="blue">
                                     <label
@@ -174,6 +175,7 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                 />
                                 <FormLabel w="full">Description:</FormLabel>
                                 <Textarea
+                                    height="10rem"
                                     placeholder="Description"
                                     {...register("description", {
                                         required: true,
@@ -194,7 +196,6 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                                 {...register("stocks", {
                                                     required: true,
                                                     min: 1,
-                                                    max: 99,
                                                 })}
                                             />
                                             <NumberInputStepper>
@@ -216,7 +217,6 @@ const NewProductModal = ({ isOpen, onClose }: NewProductModalProps) => {
                                                 {...register("price", {
                                                     required: true,
                                                     min: 1,
-                                                    max: 99,
                                                 })}
                                             />
                                             <NumberInputStepper>

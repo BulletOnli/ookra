@@ -19,7 +19,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import useUserStore from "@/src/stores/userStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { isTokenAvailable } from "../utils/checkAccessToken";
 import { useQueryClient } from "@tanstack/react-query";
 import { CartItemType } from "./cart/CartItem";
@@ -27,6 +27,7 @@ import { CartItemType } from "./cart/CartItem";
 const Cart = dynamic(() => import("./cart/Cart"));
 
 const Navbar = () => {
+    const pathname = usePathname();
     const toast = useToast();
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
@@ -53,12 +54,13 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        const checkToken = async () => {
-            await isTokenAvailable();
-        };
-        checkToken();
         getAccountDetails();
     }, []);
+
+    useEffect(() => {
+        const checkToken = async () => await isTokenAvailable();
+        checkToken();
+    }, [pathname]);
 
     return (
         <>
@@ -130,6 +132,8 @@ const Navbar = () => {
                                     </MenuItem>
                                 ) : (
                                     <MenuItem
+                                        as={Link}
+                                        href="/user/purchase"
                                         icon={<BsCreditCard size={17} />}
                                         className="hover:bg-gray-100"
                                     >

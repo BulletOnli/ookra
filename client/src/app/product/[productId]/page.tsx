@@ -36,8 +36,6 @@ const ProductPage = () => {
         checkToken();
     }, []);
 
-    if (singleProductQuery?.isFetching) return <Loading />;
-
     return (
         <div className="w-[85vw] 2xl:w-[65vw] flex flex-col items-center p-6 mb-6">
             <p className="w-full text-lg font-semibold text-gray-800 mb-4">

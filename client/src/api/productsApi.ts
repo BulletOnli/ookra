@@ -46,3 +46,20 @@ export const removeProduct = async (productId: string) => {
 
     return response.data;
 };
+
+export const updateProductDetails = async (
+    productInfo: FormData,
+    productId: string
+) => {
+    const response = await axios.put(
+        `${API}/update?productId=${productId}`,
+        productInfo,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+            },
+        }
+    );
+
+    return response.data;
+};

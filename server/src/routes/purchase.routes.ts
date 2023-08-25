@@ -12,7 +12,20 @@ router.get(
     roleChecker(["Buyer"]),
     asyncHandler(async (req: Request, res: Response) => {
         const { userId } = req.query;
-        const purchaseHistory = await Purchase.find({ purchaseOwner: userId });
+        const purchaseHistory = await Purchase.find({
+            purchaseOwner: userId,
+        })
+            .populate({ path: "purchaseOwner", select: ["-password"] })
+            .populate({
+                path: "_id",
+                populate: {
+                    path: "seller",
+                    select: ["-password"],
+                },
+            })
+            .sort({
+                updatedAt: "desc",
+            });
 
         res.status(200).json(purchaseHistory);
     })

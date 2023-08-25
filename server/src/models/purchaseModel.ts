@@ -2,20 +2,6 @@ import mongoose, { InferSchemaType } from "mongoose";
 
 const purchaseSchema = new mongoose.Schema(
     {
-        productName: {
-            type: String,
-            required: true,
-        },
-        productImg: {
-            url: {
-                type: String,
-                required: true,
-            },
-            id: {
-                type: String,
-                required: true,
-            },
-        },
         _id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
@@ -28,6 +14,10 @@ const purchaseSchema = new mongoose.Schema(
         purchaseOwner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
+            required: true,
+        },
+        totalQuantity: {
+            type: Number,
             required: true,
         },
     },

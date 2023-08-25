@@ -29,7 +29,7 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                 status: "success",
                 isClosable: true,
                 duration: 1000,
-                position: "top-right",
+                position: "top-left",
                 variant: "left-accent",
             });
         },

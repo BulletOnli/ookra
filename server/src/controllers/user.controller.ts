@@ -56,7 +56,6 @@ export const changeAccountPassword = asyncHandler(
 
         if (user) {
             if (!(await bcrypt.compare(oldPassword, user?.password))) {
-                console.log("dont p");
                 res.status(400);
                 throw new Error("Password don't match");
             } else {

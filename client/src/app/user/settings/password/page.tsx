@@ -70,7 +70,6 @@ const PasswordSettingsPage = () => {
                 <div className="w-full flex flex-col items-center p-4 ">
                     <form
                         onSubmit={handleSubmit((data) => {
-                            console.log(data);
                             changePasswordMutation.mutate(data);
                         })}
                     >
