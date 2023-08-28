@@ -62,3 +62,37 @@ export const fetchUserDetails = async (userId: string) => {
 
     return response.data;
 };
+
+export const getAllFollowers = async (userId: string) => {
+    const response = await axios.get(`${API}/followers/all?userId=${userId}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+        },
+    });
+
+    return response.data;
+};
+
+export const followUser = async (userId: string) => {
+    const response = await axios.post(`${API}/follow?userId=${userId}`, null, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+        },
+    });
+
+    return response.data;
+};
+
+export const unfollowUser = async (userId: string) => {
+    const response = await axios.post(
+        `${API}/unfollow?userId=${userId}`,
+        null,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+            },
+        }
+    );
+
+    return response.data;
+};

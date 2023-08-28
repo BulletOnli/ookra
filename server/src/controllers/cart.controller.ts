@@ -31,7 +31,7 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
 
 export const addToCart = asyncHandler(async (req: Request, res: Response) => {
     const { productId } = req.query;
-    const { quantity } = req.body;
+    const { quantity } = req.body as { quantity: number };
     const product = await Product.findById(productId).populate({
         path: "seller",
         select: ["-password"],
@@ -39,7 +39,7 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
     const { productName, stocks, productImg, seller, price } =
         product as productType;
 
-    const isInCart = await Cart.findById(productId).populate("seller");
+    const isInCart = await Cart.findById(productId);
 
     if (!product) {
         res.status(404);
@@ -48,7 +48,7 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
 
     if (stocks > (isInCart?.inCart || 0)) {
         if (isInCart) {
-            isInCart.inCart += quantity;
+            isInCart.inCart += Number(quantity);
             await isInCart.save();
 
             res.status(200).json({ message: "+1 Item Quantity" });
@@ -62,6 +62,7 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
                 inCart: quantity,
                 cartOwner: req.user._id,
             });
+
             res.status(201).json({ message: "Added to cart" });
         }
     } else {

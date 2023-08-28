@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import { Request, Response } from "express";
 import User from "../models/userModel";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 // Details of the account logged in
 export const getAccountDetails = asyncHandler(
@@ -22,12 +23,8 @@ export const updateAccountDetails = asyncHandler(
         };
 
         if (user) {
-            if (firstName) {
-                user.firstName = firstName;
-            }
-            if (lastName) {
-                user.lastName = lastName;
-            }
+            if (firstName) user.firstName = firstName;
+            if (lastName) user.lastName = lastName;
             if (username) {
                 const isUsernameExist = await User.findOne({ username });
                 if (isUsernameExist) {
@@ -37,7 +34,6 @@ export const updateAccountDetails = asyncHandler(
                 user.username = username;
             }
             await user.save();
-
             res.status(200).json("Account Details updated successfully");
         } else {
             res.status(404);
@@ -67,7 +63,6 @@ export const changeAccountPassword = asyncHandler(
                 }
 
                 const hashPassword = await bcrypt.hash(newPassword, 12);
-
                 user.password = hashPassword;
                 await user.save();
 
@@ -92,6 +87,62 @@ export const getUserDetails = asyncHandler(
         } else {
             res.status(404);
             throw new Error("User not found");
+        }
+    }
+);
+
+export const getFollowers = asyncHandler(
+    async (req: Request, res: Response) => {
+        const { userId } = req.query;
+        const seller = await User.findById(userId);
+
+        if (seller) {
+            res.status(200).json(seller.followers);
+        } else {
+            res.status(404);
+            throw new Error("Seller not found");
+        }
+    }
+);
+
+export const followUser = asyncHandler(async (req: Request, res: Response) => {
+    const { userId } = req.query;
+    const seller = await User.findById(userId);
+
+    if (!seller) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    if (seller.followers.find((id) => id.toString() == req.user._id)) {
+        res.status(400);
+        throw new Error("You already followed this seller");
+    } else {
+        seller.followers.push(new mongoose.Types.ObjectId(req.user._id));
+        await seller.save();
+        res.status(200).json({ message: "You follow this Seller" });
+    }
+});
+
+export const unfollowUser = asyncHandler(
+    async (req: Request, res: Response) => {
+        const { userId } = req.query;
+        const seller = await User.findById(userId);
+
+        if (!seller) {
+            res.status(404);
+            throw new Error("User not found");
+        }
+
+        if (seller.followers.find((id) => id.toString() == req.user._id)) {
+            seller.followers = seller.followers.filter(
+                (id) => id.toString() !== req.user._id.toString()
+            );
+            await seller.save();
+            res.status(200).json({ message: "You unfollowed this seller" });
+        } else {
+            res.status(400);
+            throw new Error("You didn't follow this seller yet");
         }
     }
 );

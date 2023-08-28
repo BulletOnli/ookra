@@ -17,7 +17,7 @@ type SuccessOrderProps = {
 
 const SuccessOrder = ({ successDisclosure }: SuccessOrderProps) => {
     return (
-        <div className="absolute bg-black bg-opacity-30 w-full h-screen flex justify-center items-center z-[100]">
+        <div className="fixed bg-black bg-opacity-30 w-full h-screen flex justify-center items-center z-[100]">
             <div
                 className="absolute w-full h-screen z-10"
                 onClick={successDisclosure.onClose}

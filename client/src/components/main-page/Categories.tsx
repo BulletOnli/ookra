@@ -18,22 +18,25 @@ const Category = ({ category }: { category: string }) => {
     );
 };
 
-const Categories = ({ productsData }: { productsData: ProductType[] }) => {
-    const categories = [
-        ...new Set(
-            productsData?.map((product: ProductType) => product.category)
-        ),
-    ];
-
-    if (categories.length == 0) return;
-
+const Categories = () => {
     return (
         <div className="w-full flex flex-col bg-white rounded-md mt-6 ">
             <p className="p-4 font-medium text-gray-600 border-b">CATEGORIES</p>
             <div className="grid grid-cols-9 justify-items-center ">
-                {categories?.map((category: string, index) => (
-                    <Category key={index} category={category} />
-                ))}
+                <Category category="Art & Design" />
+                <Category category="Art and Crafts" />
+                <Category category="Clothing" />
+                <Category category="Electronics" />
+                <Category category="Entertainment" />
+                <Category category="Fashion" />
+                <Category category="Fitness" />
+                <Category category="Footwear" />
+                <Category category="Home Decor" />
+                <Category category="Home and Living" />
+                <Category category="Beauty" />
+                <Category category="Health and Wellness" />
+                <Category category="Outdoors" />
+                <Category category="Luxury" />
                 <Category category="Gaming" />
                 <Category category="Audio" />
                 <Category category="Laptops & Computer" />

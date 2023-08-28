@@ -32,7 +32,6 @@ const Navbar = () => {
     const router = useRouter();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { accountDetails, getAccountDetails, logoutUser } = useUserStore();
-
     const queryClient = useQueryClient();
 
     const itemsInCart: CartItemType[] | undefined = queryClient.getQueryData([
@@ -54,11 +53,9 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        getAccountDetails();
-    }, []);
-
-    useEffect(() => {
         const checkToken = async () => await isTokenAvailable();
+
+        if (accountDetails == null) getAccountDetails();
         checkToken();
     }, [pathname]);
 
@@ -88,10 +85,11 @@ const Navbar = () => {
                             rounded="full"
                         />
                     </InputGroup>
+
                     {accountDetails?.role === "Buyer" ? (
                         <div className=" relative">
                             <div className="absolute -right-1 -top-1 px-[6px] py-[2px] text-[10px] font-bold bg-blue-500 text-white rounded-full">
-                                {itemsInCart?.length}
+                                {itemsInCart?.length || 0}
                             </div>
                             <BsCart2
                                 className="text-3xl cursor-pointer"

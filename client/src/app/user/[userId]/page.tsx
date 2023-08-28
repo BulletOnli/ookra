@@ -1,6 +1,11 @@
 "use client";
 import { getSellerProducts } from "@/src/api/productsApi";
-import { fetchUserDetails } from "@/src/api/userApi";
+import {
+    fetchUserDetails,
+    followUser,
+    getAllFollowers,
+    unfollowUser,
+} from "@/src/api/userApi";
 import NewProductModal from "@/src/components/modals/NewProductModal";
 import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 import useUserStore, { UserType } from "@/src/stores/userStore";
@@ -15,31 +20,104 @@ import {
     TabPanels,
     Tabs,
     useDisclosure,
+    useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import { FaPaperPlane } from "react-icons/fa";
 import ProductCard, { ProductType } from "@/src/components/product/ProductCard";
 
 const UserProfilePage = () => {
+    const toast = useToast();
     const router = useRouter();
     const paramsId = useParams().userId as string;
     const accountDetails = useUserStore((state) => state.accountDetails);
     const addProductModalDisclosure = useDisclosure();
+    const queryClient = useQueryClient();
 
+    // Seller Details
     const userDetailsQuery = useQuery({
         queryKey: ["user", paramsId],
         queryFn: () => fetchUserDetails(paramsId),
     });
     const userDetails: UserType = userDetailsQuery?.data;
 
+    // Products of the seller
     const productsQuery = useQuery({
         queryKey: ["products", paramsId],
         queryFn: () => getSellerProducts(paramsId),
         enabled: userDetailsQuery?.data != undefined,
+    });
+
+    // Get seller followers
+    const getFollowersQuery = useQuery({
+        queryKey: ["user", "followers", paramsId],
+        queryFn: () => getAllFollowers(paramsId),
+        enabled: userDetailsQuery?.data != undefined,
+    });
+
+    // Check if the current user followed this seller
+    const isAlreadyFollowed = getFollowersQuery.data?.find(
+        (id: string) => id === accountDetails?._id
+    );
+
+    const followUserMutation = useMutation({
+        mutationFn: () => followUser(paramsId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["user", "followers", paramsId],
+            });
+
+            toast({
+                title: "You follow this seller",
+                status: "success",
+                isClosable: true,
+                duration: 1000,
+                position: "top",
+            });
+        },
+        onError: (err: any) => {
+            const errMessage =
+                err.response.data.error.message || "An error occured";
+            toast({
+                title: errMessage,
+                status: "error",
+                isClosable: true,
+                duration: 3000,
+                position: "top",
+            });
+        },
+    });
+
+    const unfollowUserMutation = useMutation({
+        mutationFn: () => unfollowUser(paramsId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["user", "followers", paramsId],
+            });
+
+            toast({
+                title: "You unfollow this seller",
+                status: "warning",
+                isClosable: true,
+                duration: 1000,
+                position: "top",
+            });
+        },
+        onError: (err: any) => {
+            const errMessage =
+                err.response.data.error.message || "An error occured";
+            toast({
+                title: errMessage,
+                status: "error",
+                isClosable: true,
+                duration: 3000,
+                position: "top",
+            });
+        },
     });
 
     useEffect(() => {
@@ -52,6 +130,7 @@ const UserProfilePage = () => {
         checkToken();
     }, []);
 
+    //todo: WHat tf is the purpose of this
     if (userDetails?.role === "Buyer")
         return (
             <div className="w-full h-screen flex flex-col justify-center items-center">
@@ -104,19 +183,37 @@ const UserProfilePage = () => {
                         </HStack>
                     ) : (
                         <HStack spacing={4}>
-                            <Button
-                                colorScheme="blue"
-                                variant="outline"
-                                rounded="full"
-                                px={8}
-                            >
-                                Follow
-                            </Button>
+                            {isAlreadyFollowed ? (
+                                <Button
+                                    colorScheme="blue"
+                                    variant="outline"
+                                    rounded="full"
+                                    px={8}
+                                    onClick={() =>
+                                        unfollowUserMutation.mutate()
+                                    }
+                                    isLoading={unfollowUserMutation?.isLoading}
+                                >
+                                    Unfollow
+                                </Button>
+                            ) : (
+                                <Button
+                                    colorScheme="blue"
+                                    // variant="outline"
+                                    rounded="full"
+                                    px={8}
+                                    onClick={() => followUserMutation.mutate()}
+                                    isLoading={followUserMutation?.isLoading}
+                                >
+                                    Follow
+                                </Button>
+                            )}
                             <Button
                                 leftIcon={<FaPaperPlane />}
                                 colorScheme="blue"
                                 rounded="full"
                                 px={6}
+                                isDisabled
                             >
                                 Message
                             </Button>
@@ -131,7 +228,10 @@ const UserProfilePage = () => {
                         </span>
                     </p>
                     <p className="font-medium">
-                        Followers: <span className="text-blue-600">0</span>
+                        Followers:{" "}
+                        <span className="text-blue-600">
+                            {getFollowersQuery.data?.length}
+                        </span>
                     </p>
                     <p className="font-medium">
                         Total Products:{" "}
@@ -159,7 +259,10 @@ const UserProfilePage = () => {
                             <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-items-center gap-2 lg:gap-6">
                                 {productsQuery?.data?.map(
                                     (product: ProductType) => (
-                                        <ProductCard productData={product} />
+                                        <ProductCard
+                                            key={product._id}
+                                            productData={product}
+                                        />
                                     )
                                 )}
                             </div>

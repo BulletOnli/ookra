@@ -15,10 +15,21 @@ import { addToCart } from "@/src/api/cartApi";
 import { useState } from "react";
 import Link from "next/link";
 
-const ProductOverview = ({ productData }: { productData: ProductType }) => {
+const ProductOverview = ({
+    productData,
+    sellerId,
+}: {
+    productData: ProductType;
+    sellerId: string;
+}) => {
     const toast = useToast();
     const queryClient = useQueryClient();
     const [quantity, setQuantity] = useState(1);
+
+    const sellerProducts: ProductType[] | undefined = queryClient.getQueryData([
+        "products",
+        sellerId,
+    ]);
 
     const addToCartMutation = useMutation({
         mutationFn: () => addToCart(productData?._id, quantity),
@@ -151,7 +162,9 @@ const ProductOverview = ({ productData }: { productData: ProductType }) => {
                                 {productData?.seller?.firstName}{" "}
                                 {productData?.seller?.lastName}
                             </p>
-                            <small className="w-full">Products: --</small>
+                            <small className="w-full">
+                                Products: {sellerProducts?.length}
+                            </small>
                         </VStack>
                     </HStack>
                     <Spacer />

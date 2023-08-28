@@ -83,7 +83,11 @@ const UserSettingsPage = () => {
                         )}
                     >
                         <VStack mb={8}>
-                            <Avatar name="Bullet" size="xl" position="relative">
+                            <Avatar
+                                name={accountDetails?.firstName}
+                                size="xl"
+                                position="relative"
+                            >
                                 <BsCamera className="absolute -bottom-2 right-1 text-[2rem] p-2 bg-white shadow-custom rounded-full text-black" />
                             </Avatar>
                         </VStack>
@@ -135,6 +139,12 @@ const UserSettingsPage = () => {
                             mt={2}
                             colorScheme="blue"
                             isLoading={updateAccountDetailsMutation.isLoading}
+                            isDisabled={
+                                watch().firstName ===
+                                    accountDetails?.firstName &&
+                                watch().lastName === accountDetails?.lastName &&
+                                watch().username === accountDetails?.username
+                            }
                         >
                             Save Changes
                         </Button>

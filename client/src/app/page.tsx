@@ -5,7 +5,6 @@ import ImageSlider from "@/src/components/main-page/ImageSlider";
 import { Image } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { isTokenAvailable } from "../utils/checkAccessToken";
 import Categories from "../components/main-page/Categories";
 import useUserStore from "../stores/userStore";
 
@@ -18,8 +17,6 @@ const Homepage = () => {
     });
 
     useEffect(() => {
-        const checkToken = async () => await isTokenAvailable();
-        checkToken();
         getAccountDetails();
     }, []);
 
@@ -45,7 +42,7 @@ const Homepage = () => {
                 </div>
             </div>
 
-            <Categories productsData={productQuery?.data} />
+            <Categories />
 
             <div className="w-full flex flex-col gap-4 mt-8">
                 <p className="w-full text-xl font-bold">Trending Products</p>
