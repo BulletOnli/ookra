@@ -105,9 +105,25 @@ export const getFollowers = asyncHandler(
     }
 );
 
+export const getFollowing = asyncHandler(
+    async (req: Request, res: Response) => {
+        const { userId } = req.query;
+        const currentUser = await User.findById(userId);
+
+        if (currentUser) {
+            res.status(200).json(currentUser.following);
+        } else {
+            res.status(404);
+            throw new Error("User not found");
+        }
+    }
+);
+
 export const followUser = asyncHandler(async (req: Request, res: Response) => {
     const { userId } = req.query;
     const seller = await User.findById(userId);
+
+    const currentUser = await User.findById(req.user._id);
 
     if (!seller) {
         res.status(404);
@@ -119,7 +135,9 @@ export const followUser = asyncHandler(async (req: Request, res: Response) => {
         throw new Error("You already followed this seller");
     } else {
         seller.followers.push(new mongoose.Types.ObjectId(req.user._id));
+        currentUser?.following.push(seller._id);
         await seller.save();
+        await currentUser?.save();
         res.status(200).json({ message: "You follow this Seller" });
     }
 });
@@ -129,7 +147,9 @@ export const unfollowUser = asyncHandler(
         const { userId } = req.query;
         const seller = await User.findById(userId);
 
-        if (!seller) {
+        const currentUser = await User.findById(req.user._id);
+
+        if (!seller || !currentUser) {
             res.status(404);
             throw new Error("User not found");
         }
@@ -138,6 +158,10 @@ export const unfollowUser = asyncHandler(
             seller.followers = seller.followers.filter(
                 (id) => id.toString() !== req.user._id.toString()
             );
+            currentUser.following = currentUser?.following.filter(
+                (id) => id.toString() !== seller?._id.toString()
+            );
+            await currentUser?.save();
             await seller.save();
             res.status(200).json({ message: "You unfollowed this seller" });
         } else {

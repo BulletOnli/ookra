@@ -64,7 +64,7 @@ export const fetchUserDetails = async (userId: string) => {
 };
 
 export const getAllFollowers = async (userId: string) => {
-    const response = await axios.get(`${API}/followers/all?userId=${userId}`, {
+    const response = await axios.get(`${API}/followers/list?userId=${userId}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
         },

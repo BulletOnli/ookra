@@ -74,6 +74,7 @@ const PurchasePage = () => {
         <div className="w-[85vw] 2xl:w-[55vw] min-h-screen flex flex-col items-center p-4 mt-4">
             <h1 className="text-2xl font-semibold">Purchase History</h1>
             <div className="w-full flex flex-col items-center gap-3 mt-6">
+                {purchaseHistory.isLoading && <p>Loading purchases...</p>}
                 {purchaseHistory?.data?.length == 0 ? (
                     <p>No purchases yet</p>
                 ) : (

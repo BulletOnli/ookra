@@ -1,5 +1,6 @@
 "use client";
 import { registerUser } from "@/src/api/authApi";
+import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 import {
     Button,
     HStack,
@@ -12,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 
 const Registerpage = () => {
     const router = useRouter();
@@ -77,6 +78,16 @@ const Registerpage = () => {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        const checkToken = async () => {
+            if (await isTokenAvailable()) {
+                router.push("/");
+            }
+        };
+
+        checkToken();
+    }, []);
 
     return (
         <div className="w-full h-screen flex flex-col justify-center items-center">

@@ -7,6 +7,7 @@ import {
     followUser,
     getFollowers,
     unfollowUser,
+    getFollowing,
 } from "../controllers/user.controller";
 import protectRoute from "../middleware/auth/protectRoute";
 import roleChecker from "../middleware/auth/roleChecker";
@@ -34,11 +35,37 @@ router.post(
 );
 
 // Details of the user (any user)
-router.get("/details", protectRoute, getUserDetails);
+router.get(
+    "/details",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    getUserDetails
+);
 
-router.get("/followers/all", protectRoute, getFollowers);
+router.get(
+    "/followers/list",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    getFollowers
+);
+router.get(
+    "/following/list",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    getFollowing
+);
 // Follow user/seller
-router.post("/follow", protectRoute, followUser);
-router.post("/unfollow", protectRoute, unfollowUser);
+router.post(
+    "/follow",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    followUser
+);
+router.post(
+    "/unfollow",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    unfollowUser
+);
 
 export default router;

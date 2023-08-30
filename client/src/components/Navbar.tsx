@@ -13,7 +13,13 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { BsSearch, BsCart2, BsCreditCard, BsGear } from "react-icons/bs";
+import {
+    BsSearch,
+    BsCart2,
+    BsCreditCard,
+    BsGear,
+    BsPeople,
+} from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 import dynamic from "next/dynamic";
@@ -139,6 +145,14 @@ const Navbar = () => {
                                     </MenuItem>
                                 )}
 
+                                <MenuItem
+                                    as={Link}
+                                    icon={<BsPeople size={17} />}
+                                    className="hover:bg-gray-100"
+                                    href="/user/settings"
+                                >
+                                    Following
+                                </MenuItem>
                                 <MenuItem
                                     as={Link}
                                     icon={<BsGear size={17} />}

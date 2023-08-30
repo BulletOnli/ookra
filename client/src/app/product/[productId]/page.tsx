@@ -9,10 +9,27 @@ import { useEffect } from "react";
 import { isTokenAvailable } from "@/src/utils/checkAccessToken";
 import useUserStore from "@/src/stores/userStore";
 
+import React, { useRef, useState } from "react";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+
+// import required modules
+import { Pagination } from "swiper/modules";
+
 const ProductPage = () => {
     const router = useRouter();
     const productId = useParams().productId as string;
     const accountDetails = useUserStore((state) => state.accountDetails);
+
+    const queryClient = useQueryClient();
+
+    const allProducts: ProductType[] | undefined = queryClient.getQueryData([
+        "products",
+    ]);
 
     // Single product
     const singleProductQuery = useQuery({
@@ -53,6 +70,32 @@ const ProductPage = () => {
                 sellerId={singleProductQuery?.data?.seller?._id}
                 productData={singleProductQuery?.data}
             />
+
+            <div className="w-full flex flex-col gap-4 mt-14">
+                <p className="text-xl font-semibold">Related Products</p>
+                <Swiper
+                    slidesPerView={6}
+                    spaceBetween={35}
+                    grabCursor={true}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    modules={[Pagination]}
+                    className="w-full "
+                >
+                    {allProducts
+                        ?.filter(
+                            (item) =>
+                                item.category ==
+                                singleProductQuery.data?.category
+                        )
+                        .map((product: ProductType) => (
+                            <SwiperSlide key={product._id}>
+                                <ProductCard productData={product} />
+                            </SwiperSlide>
+                        ))}
+                </Swiper>
+            </div>
 
             <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>
