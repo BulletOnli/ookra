@@ -32,10 +32,7 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
 export const addToCart = asyncHandler(async (req: Request, res: Response) => {
     const { productId } = req.query;
     const { quantity } = req.body as { quantity: number };
-    const product = await Product.findById(productId).populate({
-        path: "seller",
-        select: ["-password"],
-    });
+    const product = await Product.findById(productId);
     const { productName, stocks, productImg, seller, price } =
         product as productType;
 
@@ -57,7 +54,7 @@ export const addToCart = asyncHandler(async (req: Request, res: Response) => {
                 productImg,
                 productName,
                 _id: product._id,
-                seller: seller._id,
+                seller: seller,
                 price,
                 inCart: quantity,
                 cartOwner: req.user._id,

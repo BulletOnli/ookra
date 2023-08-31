@@ -40,8 +40,8 @@ const ProductOverview = ({
                 status: "success",
                 isClosable: true,
                 duration: 1000,
-                position: "top-left",
-                variant: "left-accent",
+                position: "top",
+                variant: "subtle",
             });
         },
         onError: (err: any) => {

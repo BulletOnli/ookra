@@ -8,6 +8,17 @@ import { useEffect } from "react";
 import Categories from "../components/main-page/Categories";
 import useUserStore from "../stores/userStore";
 
+import React, { useRef, useState } from "react";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+
+// import required modules
+import { Pagination } from "swiper/modules";
+
 const Homepage = () => {
     const getAccountDetails = useUserStore((state) => state.getAccountDetails);
 
@@ -41,22 +52,31 @@ const Homepage = () => {
                     />
                 </div>
             </div>
-
             <Categories />
 
             <div className="w-full flex flex-col gap-4 mt-8">
                 <p className="w-full text-xl font-bold">Trending Products</p>
-                <div className="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 justify-items-center gap-2 lg:gap-6">
+                <Swiper
+                    slidesPerView={6}
+                    grabCursor={true}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    modules={[Pagination]}
+                    className="w-full"
+                >
                     {productQuery.isLoading && <h1>Loading product</h1>}
                     {productQuery?.data
-                        ?.slice(0, 12)
+                        ?.slice(0, 10)
                         .map((product: ProductType) => (
-                            <ProductCard
-                                productData={product}
-                                key={product._id}
-                            />
+                            <SwiperSlide key={product._id}>
+                                <ProductCard
+                                    productData={product}
+                                    key={product._id}
+                                />
+                            </SwiperSlide>
                         ))}
-                </div>
+                </Swiper>
             </div>
 
             <div className="w-full flex flex-col gap-4 mt-10">

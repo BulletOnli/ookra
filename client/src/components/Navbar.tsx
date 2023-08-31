@@ -67,7 +67,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="sticky top-0 z-10 w-full px-4 py-5 bg-white flex items-center justify-around shadow-custom">
+            <nav className="sticky top-0 z-50 w-full px-4 py-5 bg-white flex items-center justify-around shadow-custom">
                 <Link href="/">
                     <div className="text-2xl font-bold tracking-wider">
                         Ookra
@@ -149,7 +149,7 @@ const Navbar = () => {
                                     as={Link}
                                     icon={<BsPeople size={17} />}
                                     className="hover:bg-gray-100"
-                                    href="/user/settings"
+                                    href="/user/following"
                                 >
                                     Following
                                 </MenuItem>

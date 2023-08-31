@@ -4,6 +4,7 @@ import {
     fetchUserDetails,
     followUser,
     getAllFollowers,
+    getAllFollowing,
     unfollowUser,
 } from "@/src/api/userApi";
 import NewProductModal from "@/src/components/modals/NewProductModal";
@@ -19,6 +20,7 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
+    VStack,
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
@@ -59,9 +61,17 @@ const UserProfilePage = () => {
         enabled: userDetailsQuery?.data != undefined,
     });
 
+    // Get seller following
+    const getFollowingQuery = useQuery({
+        queryKey: ["user", "following", paramsId],
+        queryFn: () => getAllFollowing(paramsId),
+        enabled: userDetailsQuery?.data != undefined,
+    });
+
     // Check if the current user followed this seller
     const isAlreadyFollowed = getFollowersQuery.data?.find(
-        (id: string) => id === accountDetails?._id
+        (follower: { _id: string; firstName: string; lastName: string }) =>
+            follower._id === accountDetails?._id
     );
 
     const followUserMutation = useMutation({
@@ -130,31 +140,37 @@ const UserProfilePage = () => {
         checkToken();
     }, []);
 
-    //todo: WHat tf is the purpose of this
-    if (userDetails?.role === "Buyer")
-        return (
-            <div className="w-full h-screen flex flex-col justify-center items-center">
-                <h1 className="text-[3rem] font-bold">404</h1>
-                <p className="mb-6 text-2xl">Page not found</p>
-                <Button colorScheme="blue" onClick={() => router.back()}>
-                    Go back
-                </Button>
-            </div>
-        );
-
     return (
         <>
             <div className="w-[85vw] 2xl:w-[65vw] min-h-screen flex flex-col items-center p-4">
                 <div className="w-full flex items-center p-4 mt-4">
                     <HStack spacing={4}>
                         <Avatar name={userDetails?.firstName} size="xl" />
-                        <div className="">
-                            <h1 className="text-2xl font-bold">
-                                {userDetails?.firstName} {userDetails?.lastName}
-                            </h1>
-                            <p className="text-gray-600">
-                                @{userDetails?.username}
-                            </p>
+                        <div>
+                            <HStack>
+                                <h1 className="text-2xl font-bold">
+                                    {userDetails?.firstName}{" "}
+                                    {userDetails?.lastName}
+                                </h1>
+                                <p className="text-gray-600">
+                                    @{userDetails?.username}
+                                </p>
+                            </HStack>
+                            <HStack spacing={4} ml={1}>
+                                <p className="text-gray-600 font-medium text-sm">
+                                    Following:{" "}
+                                    <span className="text-blue-600">
+                                        {getFollowingQuery.data?.length}
+                                    </span>
+                                </p>
+                                <p className="text-gray-600 font-medium text-sm">
+                                    Followers:{" "}
+                                    <span className="text-blue-600">
+                                        {" "}
+                                        {getFollowersQuery.data?.length}
+                                    </span>
+                                </p>
+                            </HStack>
                         </div>
                     </HStack>
                     <Spacer />
@@ -225,12 +241,6 @@ const UserProfilePage = () => {
                         Location:{" "}
                         <span className="text-blue-600">
                             {userDetails?.location}
-                        </span>
-                    </p>
-                    <p className="font-medium">
-                        Followers:{" "}
-                        <span className="text-blue-600">
-                            {getFollowersQuery.data?.length}
                         </span>
                     </p>
                     <p className="font-medium">

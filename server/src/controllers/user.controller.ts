@@ -94,7 +94,10 @@ export const getUserDetails = asyncHandler(
 export const getFollowers = asyncHandler(
     async (req: Request, res: Response) => {
         const { userId } = req.query;
-        const seller = await User.findById(userId);
+        const seller = await User.findById(userId).populate({
+            path: "followers",
+            select: ["firstName", "lastName"],
+        });
 
         if (seller) {
             res.status(200).json(seller.followers);
@@ -108,7 +111,10 @@ export const getFollowers = asyncHandler(
 export const getFollowing = asyncHandler(
     async (req: Request, res: Response) => {
         const { userId } = req.query;
-        const currentUser = await User.findById(userId);
+        const currentUser = await User.findById(userId).populate({
+            path: "following",
+            select: ["firstName", "lastName"],
+        });
 
         if (currentUser) {
             res.status(200).json(currentUser.following);

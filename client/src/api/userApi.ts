@@ -73,6 +73,16 @@ export const getAllFollowers = async (userId: string) => {
     return response.data;
 };
 
+export const getAllFollowing = async (userId: string) => {
+    const response = await axios.get(`${API}/following/list?userId=${userId}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+        },
+    });
+
+    return response.data;
+};
+
 export const followUser = async (userId: string) => {
     const response = await axios.post(`${API}/follow?userId=${userId}`, null, {
         headers: {

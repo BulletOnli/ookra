@@ -140,7 +140,7 @@ const EditProductModal = ({
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>New product</ModalHeader>
+                    <ModalHeader>Update product details</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <div className="w-full flex justify-center items-center gap-10">
@@ -272,7 +272,7 @@ const EditProductModal = ({
                             isLoading={newProductMutation?.isLoading}
                             spinnerPlacement="start"
                         >
-                            Create
+                            Save Changes
                         </Button>
                     </ModalFooter>
                 </ModalContent>

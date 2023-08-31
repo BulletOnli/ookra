@@ -8,7 +8,7 @@ export const getSingleProduct = asyncHandler(
         const { productId } = req.query;
         const product = await Product.findById(productId).populate({
             path: "seller",
-            select: ["-password"],
+            select: ["username", "firstName", "lastName"],
         });
 
         if (product) {
@@ -23,24 +23,9 @@ export const getSingleProduct = asyncHandler(
 export const getAllProducts = asyncHandler(
     async (req: Request, res: Response) => {
         const { sellerId } = req.query;
+        const query = sellerId ? { seller: sellerId } : {};
 
-        let products = await Product.find()
-            .populate({
-                path: "seller",
-                select: ["-password"],
-            })
-            .sort({ updatedAt: "desc" });
-
-        if (sellerId) {
-            products = await Product.find({ seller: sellerId })
-                .populate({
-                    path: "seller",
-                    select: ["-password"],
-                })
-                .sort({
-                    updatedAt: "desc",
-                });
-        }
+        const products = await Product.find(query).sort({ updatedAt: "desc" });
 
         res.status(200).json(products);
     }

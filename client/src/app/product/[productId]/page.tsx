@@ -71,31 +71,33 @@ const ProductPage = () => {
                 productData={singleProductQuery?.data}
             />
 
-            <div className="w-full flex flex-col gap-4 mt-14">
-                <p className="text-xl font-semibold">Related Products</p>
-                <Swiper
-                    slidesPerView={6}
-                    spaceBetween={35}
-                    grabCursor={true}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    modules={[Pagination]}
-                    className="w-full "
-                >
-                    {allProducts
-                        ?.filter(
-                            (item) =>
-                                item.category ==
-                                singleProductQuery.data?.category
-                        )
-                        .map((product: ProductType) => (
-                            <SwiperSlide key={product._id}>
-                                <ProductCard productData={product} />
-                            </SwiperSlide>
-                        ))}
-                </Swiper>
-            </div>
+            {allProducts && (
+                <div className="w-full flex flex-col gap-4 mt-14">
+                    <p className="text-xl font-semibold">Related Products</p>
+                    <Swiper
+                        slidesPerView={6}
+                        spaceBetween={35}
+                        grabCursor={true}
+                        pagination={{
+                            clickable: true,
+                        }}
+                        modules={[Pagination]}
+                        className="w-full "
+                    >
+                        {allProducts
+                            ?.filter(
+                                (item) =>
+                                    item.category ==
+                                    singleProductQuery.data?.category
+                            )
+                            .map((product: ProductType) => (
+                                <SwiperSlide key={product._id}>
+                                    <ProductCard productData={product} />
+                                </SwiperSlide>
+                            ))}
+                    </Swiper>
+                </div>
+            )}
 
             <div className="w-full flex flex-col gap-4 mt-14">
                 <p className="text-xl font-semibold">From the same shop</p>
