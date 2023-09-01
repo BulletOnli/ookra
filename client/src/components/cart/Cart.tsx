@@ -96,6 +96,11 @@ const Cart = ({ onClose, isOpen, accountDetails }: CartProps) => {
                     <DrawerBody>
                         <div className="w-full h-full flex flex-col">
                             <div className="w-full h-full flex flex-col gap-4 overflow-y-auto">
+                                {cartItemsQuery.data?.length <= 0 && (
+                                    <p className="w-full h-full flex justify-center items-center mt-6">
+                                        Cart is empty
+                                    </p>
+                                )}
                                 {cartItemsQuery?.data?.map(
                                     (item: CartItemType) => (
                                         <CartItem

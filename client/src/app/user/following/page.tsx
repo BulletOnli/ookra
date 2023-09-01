@@ -35,8 +35,6 @@ const FollowingPage = () => {
                         rounded="lg"
                         w="full"
                         key={following._id}
-                        as={Link}
-                        href={`/user/${following._id}`}
                     >
                         <HStack>
                             <Avatar name={following.firstName} />
@@ -49,6 +47,8 @@ const FollowingPage = () => {
                             size="xs"
                             variant="outline"
                             leftIcon={<FaStore />}
+                            as={Link}
+                            href={`/user/${following._id}`}
                         >
                             View
                         </Button>

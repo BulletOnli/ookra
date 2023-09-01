@@ -3,6 +3,20 @@ import asyncHandler from "express-async-handler";
 import Product from "../models/productModel";
 import { uploadImg, deleteImg } from "../utils/cloudinary";
 
+export const searchProducts = asyncHandler(
+    async (req: Request, res: Response) => {
+        const { productName } = req.query as { productName: string };
+
+        const products = await Product.find();
+        const results = products.filter(
+            (product) =>
+                product.productName.toLowerCase() === productName?.toLowerCase()
+        );
+
+        res.status(200).json(results);
+    }
+);
+
 export const getSingleProduct = asyncHandler(
     async (req: Request, res: Response) => {
         const { productId } = req.query;
@@ -20,6 +34,7 @@ export const getSingleProduct = asyncHandler(
     }
 );
 
+// Get all products or only products of the specific seller
 export const getAllProducts = asyncHandler(
     async (req: Request, res: Response) => {
         const { sellerId } = req.query;

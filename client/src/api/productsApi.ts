@@ -2,6 +2,19 @@ import axios from "axios";
 
 const API: string = "http://localhost:5050/product";
 
+export const searchProducts = async (productName: string) => {
+    const response = await axios.get(
+        `${API}/search?productName=${productName}`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("ookraToken")}`,
+            },
+        }
+    );
+
+    return response.data;
+};
+
 export const getAllProducts = async () => {
     const response = await axios.get(`${API}/all`);
 

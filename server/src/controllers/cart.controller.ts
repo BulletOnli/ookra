@@ -31,7 +31,7 @@ export const clearCart = asyncHandler(async (req: Request, res: Response) => {
 
 export const addToCart = asyncHandler(async (req: Request, res: Response) => {
     const { productId } = req.query;
-    const { quantity } = req.body as { quantity: number };
+    const { quantity } = req.body;
     const product = await Product.findById(productId);
     const { productName, stocks, productImg, seller, price } =
         product as productType;

@@ -29,6 +29,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { isTokenAvailable } from "../utils/checkAccessToken";
 import { useQueryClient } from "@tanstack/react-query";
 import { CartItemType } from "./cart/CartItem";
+import SearchBar from "./SearchBar";
 
 const Cart = dynamic(() => import("./cart/Cart"));
 
@@ -81,16 +82,7 @@ const Navbar = () => {
                 </HStack>
 
                 <HStack spacing={5}>
-                    <InputGroup>
-                        <InputLeftElement>
-                            <BsSearch />
-                        </InputLeftElement>
-                        <Input
-                            type="search"
-                            placeholder="Search"
-                            rounded="full"
-                        />
-                    </InputGroup>
+                    <SearchBar />
 
                     {accountDetails?.role === "Buyer" ? (
                         <div className=" relative">

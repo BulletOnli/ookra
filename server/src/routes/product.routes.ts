@@ -4,6 +4,7 @@ import {
     getAllProducts,
     getSingleProduct,
     removeProduct,
+    searchProducts,
     updateProduct,
 } from "../controllers/product.controller";
 import multer from "multer";
@@ -22,6 +23,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+router.get(
+    "/search",
+    protectRoute,
+    roleChecker(["Seller", "Buyer"]),
+    searchProducts
+);
 router.get(
     "/",
     protectRoute,
