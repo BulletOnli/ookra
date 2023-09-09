@@ -2,10 +2,10 @@ import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import SearchResults from "./SearchResults";
-import _ from "lodash";
 import { searchProducts } from "../api/productsApi";
 import { ProductType } from "./product/ProductCard";
 import { useRouter } from "next/navigation";
+import throttle from "lodash.throttle";
 
 const SearchBar = () => {
     const router = useRouter();
@@ -16,10 +16,11 @@ const SearchBar = () => {
     const handleSearch = async (productName: string) => {
         setIsSearching(true);
         const response = await searchProducts(productName);
+        console.log(response);
         setSearchResults(response);
         setIsSearching(false);
     };
-    const handleChange = _.throttle((e: string) => handleSearch(e), 500);
+    const handleChange = throttle((e: string) => handleSearch(e), 500);
 
     const handleClick = (productId: string) => {
         router.push(`/product/${productId}`);
@@ -47,7 +48,7 @@ const SearchBar = () => {
                         type="search"
                         placeholder="Search"
                         rounded="full"
-                        // onChange={(e) => handleChange(e.target.value)}
+                        onChange={(e) => handleChange(e.target.value)}
                     />
                 </InputGroup>
             </form>

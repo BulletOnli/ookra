@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ProductType } from "./product/ProductCard";
 import { useRouter } from "next/navigation";
 import { RefObject } from "react";
+import { Avatar, HStack } from "@chakra-ui/react";
 
 const SearchResults = ({
     searchResults,
@@ -20,13 +21,15 @@ const SearchResults = ({
                 <p>No Results</p>
             ) : (
                 searchResults.map((result) => (
-                    <p
-                        key={result._id}
-                        className="w-full text-center hover:bg-gray-100 p-2 cursor-pointer"
-                        onClick={() => handleClick(result._id)}
-                    >
-                        {result.productName}
-                    </p>
+                    <HStack className="w-full hover:bg-gray-100 p-2 cursor-pointer">
+                        <Avatar size="sm" src={result.productImg.url} />
+                        <p
+                            key={result._id}
+                            onClick={() => handleClick(result._id)}
+                        >
+                            {result.productName}
+                        </p>
+                    </HStack>
                 ))
             )}
         </div>
