@@ -8,6 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import Navbar from "@/src/components/Navbar";
 import { Suspense } from "react";
 import Loading from "./loading";
+import CookieAlert from "../components/alerts/CookieAlert";
 
 const queryClient = new QueryClient();
 
@@ -19,12 +20,13 @@ const App = ({ children }: { children: React.ReactNode }) => {
         <QueryClientProvider client={queryClient}>
             <NextTopLoader />
             <ChakraProvider>
-                <div className="w-full min-h-screen flex flex-col items-center bg-[#EBEAF3] font-roboto">
+                <div className="relative w-full min-h-screen flex flex-col items-center bg-[#EBEAF3] font-roboto">
                     {!hideComponents && <Navbar />}
                     <Suspense fallback={<Loading />}>{children}</Suspense>
                     <Footer />
+                    <CookieAlert />
                 </div>
-                <ReactQueryDevtools initialIsOpen={false} />
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
             </ChakraProvider>
         </QueryClientProvider>
     );

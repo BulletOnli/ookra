@@ -9,9 +9,18 @@ export const getCartItems = asyncHandler(
     async (req: Request, res: Response) => {
         const { _id } = req.user;
 
-        const cartItems = await Cart.find({ cartOwner: _id }).sort({
+        const products = await Product.find();
+        let cartItems = await Cart.find({ cartOwner: _id }).sort({
             updatedAt: "desc",
         });
+
+        //todo Alisin sa cart yung product if deleted na yung product by the seller.
+        //* pansamantala na filter muna, hindi pa nareremove sa db
+        cartItems = cartItems.filter((cartItem) =>
+            products.some(
+                (product) => cartItem._id.toString() === product._id.toString()
+            )
+        );
 
         res.status(200).json(cartItems);
     }

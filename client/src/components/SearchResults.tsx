@@ -21,7 +21,10 @@ const SearchResults = ({
                 <p>No Results</p>
             ) : (
                 searchResults.map((result) => (
-                    <HStack className="w-full hover:bg-gray-100 p-2 cursor-pointer">
+                    <HStack
+                        key={result._id}
+                        className="w-full hover:bg-gray-100 p-2 cursor-pointer"
+                    >
                         <Avatar size="sm" src={result.productImg.url} />
                         <p
                             key={result._id}
